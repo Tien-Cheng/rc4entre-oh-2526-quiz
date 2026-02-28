@@ -9,6 +9,7 @@
 	import PitchRunner from '$lib/modules/pitch/PitchRunner.svelte';
 	import { createLeaderboardService } from '$lib/services/leaderboard';
 	import { createGameFlow } from '$lib/state/game-flow';
+	import { resolveDisplayName } from '$lib/state/player-name';
 	import { combineScore } from '$lib/state/scoring';
 	import type { GameMode, GamePhase, HybridOrder, LeaderboardEntry, ModuleCompletion } from '$lib/types/game';
 
@@ -16,6 +17,7 @@
 	let soundEnabled = $state(true);
 	let phase = $state<GamePhase>('attract');
 	let playerName = $state('');
+	let displayName = $state('Guest Player');
 	let finalScore = $state(0);
 	let completion = $state<ModuleCompletion>({});
 	let leaderboardEntries = $state<LeaderboardEntry[]>([]);
@@ -24,7 +26,7 @@
 	let order = $state<HybridOrder>(defaultFlowConfig.order);
 	let pitchBonus = $state(10);
 
-	let flow = createGameFlow({ mode, order });
+	let flow = createGameFlow({ mode: defaultFlowConfig.mode, order: defaultFlowConfig.order });
 	let leaderboard = createLeaderboardService('rc4entre-leaderboard-v1', { storage: null });
 
 	function refreshLeaderboard() {
@@ -34,11 +36,13 @@
 	function openPlayerIntro() {
 		completion = {};
 		playerName = '';
+		displayName = 'Guest Player';
 		phase = 'player-intro';
 	}
 
 	function startRound() {
 		completion = {};
+		displayName = resolveDisplayName(playerName);
 		flow = createGameFlow({ mode, order });
 		flow.start();
 		phase = flow.currentPhase();
@@ -50,9 +54,8 @@
 			pitchScore: completion.pitch?.score
 		});
 
-		const name = playerName.trim() || `Guest ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
 		leaderboard.add({
-			name,
+			name: displayName,
 			mode,
 			score: finalScore,
 			timestamp: Date.now(),
@@ -63,7 +66,7 @@
 
 	function onQuizComplete(result: NonNullable<ModuleCompletion['quiz']>) {
 		completion = { ...completion, quiz: result };
-		flow.completeModule('quiz', { score: result.score });
+		flow.completeModule('quiz');
 		phase = flow.currentPhase();
 		if (phase === 'results') {
 			computeAndStoreFinalScore();
@@ -72,7 +75,7 @@
 
 	function onPitchComplete(result: NonNullable<ModuleCompletion['pitch']>) {
 		completion = { ...completion, pitch: result };
-		flow.completeModule('pitch', { score: result.score });
+		flow.completeModule('pitch');
 		phase = flow.currentPhase();
 		if (phase === 'results') {
 			computeAndStoreFinalScore();
@@ -120,9 +123,9 @@
 	{order}
 	{pitchBonus}
 	{soundEnabled}
-	onModeChange={(nextMode) => (mode = nextMode)}
-	onOrderChange={(nextOrder) => (order = nextOrder)}
-	onPitchBonusChange={(nextBonus) => (pitchBonus = nextBonus)}
+	onModeChange={(nextMode: GameMode) => (mode = nextMode)}
+	onOrderChange={(nextOrder: HybridOrder) => (order = nextOrder)}
+	onPitchBonusChange={(nextBonus: number) => (pitchBonus = nextBonus)}
 	onSoundToggle={() => (soundEnabled = !soundEnabled)}
 	onClearLeaderboard={clearLeaderboard}
 	onResetRound={resetCurrentRound}
@@ -164,16 +167,17 @@
 	/>
 {:else if phase === 'pitch'}
 	<PitchRunner prepSeconds={defaultFlowConfig.pitchPrepSeconds} hostBonus={pitchBonus} onComplete={onPitchComplete} />
-{:else if phase === 'results'}
-	<ResultsScreen
-		name={playerName.trim() || 'Guest Player'}
-		{mode}
-		{finalScore}
-		quizScore={completion.quiz?.score}
-		pitchScore={completion.pitch?.score}
-		onNextPlayer={() => {
-			phase = 'attract';
-			completion = {};
-		}}
-	/>
-{/if}
+	{:else if phase === 'results'}
+		<ResultsScreen
+			name={displayName}
+			{mode}
+			{finalScore}
+			quizScore={completion.quiz?.score}
+			pitchScore={completion.pitch?.score}
+			onNextPlayer={() => {
+				phase = 'attract';
+				displayName = 'Guest Player';
+				completion = {};
+			}}
+		/>
+	{/if}

@@ -1,6 +1,6 @@
 # RC4Entre Open House Quiz Game Implementation Plan
 
-> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+> **Execution note:** Implement this plan task-by-task with explicit review checkpoints between tasks.
 
 **Goal:** Build a polished, laptop/tablet-first RC4Entre game app with host-only mode controls, independently runnable Quiz and Pitch modules, and static deployment to GitHub Pages.
 

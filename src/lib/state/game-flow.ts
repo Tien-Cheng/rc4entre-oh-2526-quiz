@@ -1,4 +1,4 @@
-import type { GameMode, GamePhase, HybridOrder, ModuleCompletion } from '$lib/types/game';
+import type { GameMode, GamePhase, HybridOrder } from '$lib/types/game';
 
 interface FlowOptions {
 	mode: GameMode;
@@ -19,7 +19,6 @@ function initialPhase(options: FlowOptions): GamePhase {
 
 export function createGameFlow(options: FlowOptions) {
 	let phase: GamePhase = 'attract';
-	const completion: ModuleCompletion = {};
 
 	return {
 		start() {
@@ -28,23 +27,7 @@ export function createGameFlow(options: FlowOptions) {
 		currentPhase() {
 			return phase;
 		},
-		completeModule(module: 'quiz' | 'pitch', payload: { score: number }) {
-			if (module === 'quiz') {
-				completion.quiz = {
-					correctCount: 0,
-					questionCount: 0,
-					score: payload.score,
-					speedBonus: 0
-				};
-			} else {
-				completion.pitch = {
-					product: '',
-					audience: '',
-					score: payload.score,
-					hostBonus: 0
-				};
-			}
-
+		completeModule(module: 'quiz' | 'pitch') {
 			if (options.mode === 'quiz-only' || options.mode === 'pitch-only') {
 				phase = 'results';
 				return;
@@ -57,13 +40,8 @@ export function createGameFlow(options: FlowOptions) {
 
 			phase = module === 'pitch' ? 'quiz' : 'results';
 		},
-		result() {
-			return completion;
-		},
 		reset() {
 			phase = 'attract';
-			delete completion.quiz;
-			delete completion.pitch;
 		}
 	};
 }

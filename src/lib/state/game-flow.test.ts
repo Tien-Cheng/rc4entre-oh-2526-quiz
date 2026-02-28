@@ -6,7 +6,7 @@ describe('game flow transitions', () => {
 		const flow = createGameFlow({ mode: 'quiz-only', order: 'quiz-first' });
 		flow.start();
 		expect(flow.currentPhase()).toBe('quiz');
-		flow.completeModule('quiz', { score: 80 });
+		flow.completeModule('quiz');
 		expect(flow.currentPhase()).toBe('results');
 	});
 
@@ -20,9 +20,9 @@ describe('game flow transitions', () => {
 		const flow = createGameFlow({ mode: 'hybrid', order: 'pitch-first' });
 		flow.start();
 		expect(flow.currentPhase()).toBe('pitch');
-		flow.completeModule('pitch', { score: 40 });
+		flow.completeModule('pitch');
 		expect(flow.currentPhase()).toBe('quiz');
-		flow.completeModule('quiz', { score: 60 });
+		flow.completeModule('quiz');
 		expect(flow.currentPhase()).toBe('results');
 	});
 });

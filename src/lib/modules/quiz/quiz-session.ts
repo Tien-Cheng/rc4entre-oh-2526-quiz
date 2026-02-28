@@ -1,5 +1,5 @@
 import { quizQuestions } from '$lib/config/quiz-questions';
-import { computeQuizScore } from '$lib/state/scoring';
+import { computeQuizScore, computeSpeedBonus } from '$lib/state/scoring';
 import type { QuizQuestion, QuizResult } from '$lib/types/game';
 
 interface QuizSessionOptions {
@@ -46,7 +46,7 @@ export function createQuizSession(options: QuizSessionOptions) {
 				correctCount: correctAnswers,
 				questionCount: questions.length,
 				score,
-				speedBonus: Math.max(0, Math.min(20, Math.floor(secondsRemainingTotal * 0.9)))
+				speedBonus: computeSpeedBonus(secondsRemainingTotal)
 			};
 		}
 	};

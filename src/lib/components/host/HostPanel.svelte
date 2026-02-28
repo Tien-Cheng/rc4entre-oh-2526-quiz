@@ -31,30 +31,31 @@
 		onStart?: () => void;
 		onClose?: () => void;
 	} = $props();
+
+function handleWindowKeydown(event: KeyboardEvent) {
+	if (open && event.key === 'Escape') {
+		event.preventDefault();
+		onClose();
+	}
+}
 </script>
 
+<svelte:window onkeydown={handleWindowKeydown} />
+
 {#if open}
-	<div
-		class="fixed inset-0 z-50 grid place-items-center bg-black/55 p-4"
-		role="button"
-		tabindex="0"
-		aria-label="Close host panel overlay"
-		onclick={onClose}
-		onkeydown={(event) => {
-			if (event.key === 'Escape' || event.key === 'Enter' || event.key === ' ') {
-				event.preventDefault();
-				onClose();
-			}
-		}}
-	>
+	<div class="fixed inset-0 z-50 grid place-items-center p-4" role="presentation">
+		<button
+			type="button"
+			aria-label="Close host panel overlay"
+			class="absolute inset-0 bg-black/55"
+			onclick={onClose}
+		></button>
 		<div
-			class="glow-card w-full max-w-xl rounded-3xl p-5"
+			class="glow-card relative z-10 w-full max-w-xl rounded-3xl p-5"
 			role="dialog"
 			tabindex="-1"
 			aria-modal="true"
 			aria-label="Host panel"
-			onclick={(event) => event.stopPropagation()}
-			onkeydown={(event) => event.stopPropagation()}
 		>
 			<div class="mb-4 flex items-center justify-between">
 				<h2 class="font-['Kanit'] text-2xl font-bold">Host Control</h2>

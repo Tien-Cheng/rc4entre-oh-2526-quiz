@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { effectiveRankScore, rankLabelFromScore } from '$lib/state/scoring';
 	import type { GameMode } from '$lib/types/game';
 
 	let {
@@ -18,10 +19,14 @@
 	} = $props();
 
 	const rank = $derived.by(() => {
-		if (finalScore >= 95) return 'VC Charmer';
-		if (finalScore >= 75) return 'Market Hunter';
-		if (finalScore >= 55) return 'Idea Spark';
-		return 'First-Time Founder';
+		return rankLabelFromScore(
+			effectiveRankScore({
+				mode,
+				finalScore,
+				quizScore,
+				pitchScore
+			})
+		);
 	});
 </script>
 
