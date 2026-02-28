@@ -58,7 +58,10 @@ function handleWindowKeydown(event: KeyboardEvent) {
 			aria-label="Host panel"
 		>
 			<div class="mb-4 flex items-center justify-between">
-				<h2 class="font-['Kanit'] text-2xl font-bold">Host Control</h2>
+				<div>
+					<p class="eyebrow">Operator Console</p>
+					<h2 class="font-['Kanit'] text-2xl font-bold">Host Control</h2>
+				</div>
 				<button class="btn btn-sm btn-ghost" onclick={onClose}>Close</button>
 			</div>
 

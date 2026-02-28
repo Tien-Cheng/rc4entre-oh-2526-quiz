@@ -34,32 +34,32 @@
 	<div class="glow-card w-full rounded-3xl p-7 md:p-10">
 		<div class="flex flex-wrap items-center justify-between gap-4">
 			<div>
-				<p class="text-xs uppercase tracking-[0.2em] opacity-70">Round Complete</p>
+				<p class="eyebrow">Round Complete</p>
 				<h2 class="font-['Kanit'] text-4xl font-extrabold">{name}</h2>
 			</div>
 			<div class="text-right">
-				<p class="text-xs uppercase tracking-[0.2em] opacity-70">Final Score</p>
-				<p class="font-['Kanit'] text-5xl font-extrabold text-[var(--brand-amber)]">{finalScore}</p>
+				<p class="eyebrow">Final Score</p>
+				<p class="hero-gradient font-['Kanit'] text-5xl font-extrabold">{finalScore}</p>
 			</div>
 		</div>
 
 		<div class="mt-4 flex flex-wrap gap-3">
-			<span class="badge badge-lg border-0 bg-[var(--brand-blue)] text-white">{rank}</span>
-			<span class="badge badge-lg badge-outline uppercase">{mode}</span>
+			<span class="metric-pill border-[var(--brand-blue)]/60 bg-[var(--brand-blue)]/30 text-white">{rank}</span>
+			<span class="metric-pill uppercase">{mode}</span>
 		</div>
 
 		<div class="mt-6 grid gap-3 md:grid-cols-2">
-			<div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-				<p class="text-sm uppercase tracking-[0.2em] opacity-70">Quiz Score</p>
+			<div class="soft-panel rounded-2xl p-4">
+				<p class="eyebrow">Quiz Score</p>
 				<p class="mt-1 text-3xl font-bold">{quizScore ?? '-'}</p>
 			</div>
-			<div class="rounded-2xl border border-white/10 bg-white/5 p-4">
-				<p class="text-sm uppercase tracking-[0.2em] opacity-70">Pitch Score</p>
+			<div class="soft-panel rounded-2xl p-4">
+				<p class="eyebrow">Pitch Score</p>
 				<p class="mt-1 text-3xl font-bold">{pitchScore ?? '-'}</p>
 			</div>
 		</div>
 
-		<div class="mt-7 rounded-2xl border border-[var(--brand-teal)]/50 bg-[var(--brand-teal)]/10 p-4">
+		<div class="soft-panel mt-7 rounded-2xl border-[var(--brand-teal)]/60 bg-[var(--brand-teal)]/16 p-4">
 			<p class="text-sm font-semibold">Join RC4Entre</p>
 			<p class="mt-1 text-sm opacity-90">
 				Ask our booth team about startup competitions, grants, and community projects.

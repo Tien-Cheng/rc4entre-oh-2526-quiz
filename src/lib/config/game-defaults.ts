@@ -4,6 +4,6 @@ export const defaultFlowConfig: FlowConfig = {
 	mode: 'hybrid',
 	order: 'quiz-first',
 	questionLimit: 8,
-	secondsPerQuestion: 12,
+	secondsPerQuestion: 20,
 	pitchPrepSeconds: 30
 };
