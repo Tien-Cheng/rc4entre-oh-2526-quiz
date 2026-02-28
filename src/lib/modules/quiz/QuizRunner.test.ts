@@ -19,12 +19,12 @@ describe('QuizRunner', () => {
 			onComplete: vi.fn()
 		});
 
-		expect(screen.getByText(/Quiz · Question 1 \/ 2/i)).toBeTruthy();
+		expect(screen.getByText(/Quiz · Question 1 \/ 2/i)).toBeInTheDocument();
 
 		const optionButtons = screen.getAllByRole('button');
 		await fireEvent.click(optionButtons[0]);
 		await vi.advanceTimersByTimeAsync(801);
 
-		expect(screen.getByText(/Quiz · Question 2 \/ 2/i)).toBeTruthy();
+		expect(screen.getByText(/Quiz · Question 2 \/ 2/i)).toBeInTheDocument();
 	});
 });
