@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
 	import HostPanel from '$lib/components/host/HostPanel.svelte';
-	import HostToggle from '$lib/components/host/HostToggle.svelte';
 	import AttractScreen from '$lib/components/screens/AttractScreen.svelte';
 	import ResultsScreen from '$lib/components/screens/ResultsScreen.svelte';
 	import { defaultFlowConfig } from '$lib/config/game-defaults';
@@ -20,7 +19,11 @@
 	let displayName = $state('Guest Player');
 	let finalScore = $state(0);
 	let completion = $state<ModuleCompletion>({});
-	let leaderboardEntries = $state<LeaderboardEntry[]>([]);
+	let leaderboardEntriesByMode = $state<Record<GameMode, LeaderboardEntry[]>>({
+		hybrid: [],
+		'quiz-only': [],
+		'pitch-only': []
+	});
 
 	let mode = $state<GameMode>(defaultFlowConfig.mode);
 	let order = $state<HybridOrder>(defaultFlowConfig.order);
@@ -30,7 +33,11 @@
 	let leaderboard = createLeaderboardService('rc4entre-leaderboard-v1', { storage: null });
 
 	function refreshLeaderboard() {
-		leaderboardEntries = leaderboard.list().slice(0, 8);
+		leaderboardEntriesByMode = {
+			hybrid: leaderboard.list('hybrid').slice(0, 5),
+			'quiz-only': leaderboard.list('quiz-only').slice(0, 5),
+			'pitch-only': leaderboard.list('pitch-only').slice(0, 5)
+		};
 	}
 
 	function openPlayerIntro() {
@@ -116,7 +123,6 @@
 	});
 </script>
 
-<HostToggle onToggle={toggleHost} />
 <HostPanel
 	open={hostOpen}
 	{mode}
@@ -137,7 +143,7 @@
 />
 
 {#if phase === 'attract'}
-	<AttractScreen onStart={openPlayerIntro} onOpenHost={() => (hostOpen = true)} entries={leaderboardEntries} />
+	<AttractScreen onStart={openPlayerIntro} entriesByMode={leaderboardEntriesByMode} />
 {:else if phase === 'player-intro'}
 	<div class="mx-auto flex min-h-dvh w-full max-w-3xl items-center px-5 py-8">
 		<div class="glow-card w-full rounded-3xl p-7">

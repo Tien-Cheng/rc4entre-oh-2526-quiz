@@ -2,16 +2,18 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { base } from '$app/paths';
 	import LeaderboardCard from '$lib/components/leaderboard/LeaderboardCard.svelte';
-	import type { LeaderboardEntry } from '$lib/types/game';
+	import type { GameMode, LeaderboardEntry } from '$lib/types/game';
 
 	let {
 		onStart = () => {},
-		onOpenHost = () => {},
-		entries = [] as LeaderboardEntry[]
+		entriesByMode = {
+			hybrid: [],
+			'quiz-only': [],
+			'pitch-only': []
+		} as Record<GameMode, LeaderboardEntry[]>
 	}: {
 		onStart?: () => void;
-		onOpenHost?: () => void;
-		entries?: LeaderboardEntry[];
+		entriesByMode?: Record<GameMode, LeaderboardEntry[]>;
 	} = $props();
 
 	const startupFacts = [
@@ -58,12 +60,11 @@
 
 		<div class="mt-7 flex flex-wrap gap-3">
 			<button class="btn brand-btn btn-lg rounded-xl px-8" onclick={() => onStart()}>Play in 2 minutes</button>
-			<button class="btn btn-ghost rounded-xl border border-white/20" onclick={() => onOpenHost()}>Host panel</button>
 		</div>
 	</section>
 
 	<section class="space-y-5">
-		<LeaderboardCard {entries} />
+		<LeaderboardCard {entriesByMode} />
 		<div class="glow-card rounded-2xl p-4">
 			<p class="text-xs uppercase tracking-[0.2em] opacity-70">How to play</p>
 			<ol class="mt-3 list-decimal space-y-1 pl-4 text-sm opacity-90">
