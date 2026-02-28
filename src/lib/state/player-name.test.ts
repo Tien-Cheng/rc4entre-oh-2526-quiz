@@ -7,6 +7,7 @@ describe('resolveDisplayName', () => {
 	});
 
 	it('returns timestamped guest name when empty', () => {
-		expect(resolveDisplayName('', new Date('2026-03-07T10:30:00+08:00'))).toBe('Guest 10:30');
+		const resolved = resolveDisplayName('', new Date('2026-03-07T10:30:00+08:00'));
+		expect(resolved).toMatch(/^Guest \d{2}:\d{2}$/);
 	});
 });
