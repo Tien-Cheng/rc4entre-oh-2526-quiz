@@ -20,22 +20,22 @@
 	} = $props();
 </script>
 
-<div class="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+<div class="soft-panel space-y-4 rounded-2xl p-4">
 	<div>
-		<p class="text-xs uppercase tracking-[0.2em] opacity-70">Mode</p>
+		<p class="eyebrow">Mode</p>
 		<div class="mt-2 grid grid-cols-3 gap-2">
-			<button class="btn btn-sm rounded-xl {mode === 'hybrid' ? 'btn-info' : 'btn-outline'}" onclick={() => onModeChange('hybrid')}>Hybrid</button>
-			<button class="btn btn-sm rounded-xl {mode === 'quiz-only' ? 'btn-info' : 'btn-outline'}" onclick={() => onModeChange('quiz-only')}>Quiz Only</button>
-			<button class="btn btn-sm rounded-xl {mode === 'pitch-only' ? 'btn-info' : 'btn-outline'}" onclick={() => onModeChange('pitch-only')}>Pitch Only</button>
+			<button class="btn btn-sm rounded-xl {mode === 'hybrid' ? 'btn-info text-white' : 'btn-outline'}" onclick={() => onModeChange('hybrid')}>Hybrid</button>
+			<button class="btn btn-sm rounded-xl {mode === 'quiz-only' ? 'btn-info text-white' : 'btn-outline'}" onclick={() => onModeChange('quiz-only')}>Quiz Only</button>
+			<button class="btn btn-sm rounded-xl {mode === 'pitch-only' ? 'btn-info text-white' : 'btn-outline'}" onclick={() => onModeChange('pitch-only')}>Pitch Only</button>
 		</div>
 	</div>
 
 	{#if mode === 'hybrid'}
 		<div>
-			<p class="text-xs uppercase tracking-[0.2em] opacity-70">Hybrid Order</p>
+			<p class="eyebrow">Hybrid Order</p>
 			<div class="mt-2 grid grid-cols-2 gap-2">
-				<button class="btn btn-sm rounded-xl {order === 'quiz-first' ? 'btn-secondary' : 'btn-outline'}" onclick={() => onOrderChange('quiz-first')}>Quiz -> Pitch</button>
-				<button class="btn btn-sm rounded-xl {order === 'pitch-first' ? 'btn-secondary' : 'btn-outline'}" onclick={() => onOrderChange('pitch-first')}>Pitch -> Quiz</button>
+				<button class="btn btn-sm rounded-xl {order === 'quiz-first' ? 'btn-secondary text-white' : 'btn-outline'}" onclick={() => onOrderChange('quiz-first')}>Quiz -> Pitch</button>
+				<button class="btn btn-sm rounded-xl {order === 'pitch-first' ? 'btn-secondary text-white' : 'btn-outline'}" onclick={() => onOrderChange('pitch-first')}>Pitch -> Quiz</button>
 			</div>
 		</div>
 	{/if}

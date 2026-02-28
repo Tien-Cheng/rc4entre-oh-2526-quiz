@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { defaultFlowConfig } from './game-defaults';
 import { pitchPools } from './pitch-pools';
 import { quizQuestions } from './quiz-questions';
 
@@ -16,5 +17,9 @@ describe('game config', () => {
 	it('has non-empty pitch product and audience pools', () => {
 		expect(pitchPools.products.length).toBeGreaterThan(0);
 		expect(pitchPools.audiences.length).toBeGreaterThan(0);
+	});
+
+	it('uses a relaxed quiz timer for open-house players', () => {
+		expect(defaultFlowConfig.secondsPerQuestion).toBe(20);
 	});
 });

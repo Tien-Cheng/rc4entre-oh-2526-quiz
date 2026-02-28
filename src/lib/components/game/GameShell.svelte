@@ -147,13 +147,13 @@
 {:else if phase === 'player-intro'}
 	<div class="mx-auto flex min-h-dvh w-full max-w-3xl items-center px-5 py-8">
 		<div class="glow-card w-full rounded-3xl p-7">
-			<p class="text-xs uppercase tracking-[0.2em] opacity-70">Player Setup</p>
+			<p class="eyebrow">Player Setup</p>
 			<h2 class="mt-1 font-['Kanit'] text-4xl font-extrabold">Ready to pitch your future?</h2>
 			<label class="mt-5 block">
-				<span class="mb-2 block text-sm opacity-80">Name (optional)</span>
+				<span class="mb-2 block text-sm text-[var(--ink-dim)]">Name (optional)</span>
 				<input
 					type="text"
-					class="input input-bordered w-full rounded-xl bg-white/5"
+					class="input input-bordered w-full rounded-xl border-white/20 bg-white/[0.06]"
 					bind:value={playerName}
 					maxlength="24"
 					placeholder="Your name"
