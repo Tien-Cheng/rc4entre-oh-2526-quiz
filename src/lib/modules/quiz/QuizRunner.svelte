@@ -15,6 +15,7 @@
 
 	const session = createQuizSession({ questionLimit, secondsPerQuestion });
 	let currentQuestion = $state(session.currentQuestion());
+	let currentQuestionNumber = $state(session.questionIndex() + 1);
 	let remainingSeconds = $state(secondsPerQuestion);
 	let selectedIndex = $state<number | null>(null);
 	let isLocked = $state(false);
@@ -45,6 +46,7 @@
 		}
 
 		currentQuestion = session.currentQuestion();
+		currentQuestionNumber = session.questionIndex() + 1;
 		selectedIndex = null;
 		isLocked = false;
 		startTimer();
@@ -79,7 +81,7 @@
 		<div class="glow-card w-full rounded-3xl p-6 md:p-8">
 			<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
 				<p class="text-xs uppercase tracking-[0.2em] opacity-70">
-					Quiz · Question {session.questionIndex() + 1} / {questionLimit}
+					Quiz · Question {currentQuestionNumber} / {questionLimit}
 				</p>
 				<p class="badge badge-warning badge-lg">{remainingSeconds}s</p>
 			</div>
