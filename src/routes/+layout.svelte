@@ -1,5 +1,4 @@
 <script lang="ts">
-	import favicon from '$lib/assets/favicon.svg';
 	import '../app.css';
 
 	let { children } = $props();
@@ -12,7 +11,7 @@
 		href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Kanit:wght@500;700;800&display=swap"
 		rel="stylesheet"
 	/>
-	<link rel="icon" href={favicon} />
+	<link rel="icon" href="/assets/rc4-entre-logo.png" />
 </svelte:head>
 
 <div data-theme="rc4entre" class="stage-shell">
