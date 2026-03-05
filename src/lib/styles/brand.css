@@ -1,0 +1,39 @@
+:root {
+	--brand-bg: #04162b;
+	--brand-teal: #00a9a0;
+	--brand-blue: #0a7ccb;
+	--brand-amber: #f6be2d;
+	--brand-coral: #f35a3a;
+	--panel: #0a243f;
+	--panel-soft: #0f3054;
+	--ink: #ebf4ff;
+}
+
+[data-theme='rc4entre'] {
+	background:
+		radial-gradient(circle at 0% 0%, color-mix(in oklab, var(--brand-blue) 35%, transparent) 0%, transparent 42%),
+		radial-gradient(circle at 100% 100%, color-mix(in oklab, var(--brand-teal) 30%, transparent) 0%, transparent 40%),
+		var(--brand-bg);
+	color: var(--ink);
+}
+
+.stage-shell {
+	min-height: 100dvh;
+}
+
+.glow-card {
+	background: linear-gradient(145deg, rgb(10 36 63 / 96%), rgb(5 23 41 / 96%));
+	border: 1px solid rgb(255 255 255 / 10%);
+	box-shadow: 0 14px 35px rgb(0 0 0 / 35%);
+}
+
+.brand-btn {
+	background: linear-gradient(130deg, var(--brand-teal), var(--brand-blue));
+	border: 0;
+	color: #00131f;
+	font-weight: 700;
+}
+
+.brand-btn:hover {
+	filter: brightness(1.06);
+}
