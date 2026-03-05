@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { effectiveRankScore, rankLabelFromScore } from '$lib/state/scoring';
 	import type { GameMode } from '$lib/types/game';
 
@@ -35,25 +35,48 @@
 	let displayQuiz = $state(0);
 	let displayPitch = $state(0);
 
-	function countUp(setter: (v: number) => void, target: number, delay = 0) {
-		if (!target) return;
-		setTimeout(() => {
+	function countUp(setter: (v: number) => void, target: number, delay = 0): () => void {
+		if (!target) return () => {};
+
+		let timeoutId: number | null = null;
+		let intervalId: number | null = null;
+
+		timeoutId = setTimeout(() => {
 			const duration = 700;
 			const steps = 40;
 			const interval = duration / steps;
 			let step = 0;
-			const tick = setInterval(() => {
+			intervalId = setInterval(() => {
 				step++;
 				setter(Math.round((step / steps) * target));
-				if (step >= steps) clearInterval(tick);
+				if (step >= steps && intervalId !== null) {
+					clearInterval(intervalId);
+				}
 			}, interval);
 		}, delay);
+
+		return () => {
+			if (timeoutId !== null) {
+				clearTimeout(timeoutId);
+			}
+			if (intervalId !== null) {
+				clearInterval(intervalId);
+			}
+		};
 	}
 
 	onMount(() => {
-		countUp((v) => (displayScore = v), finalScore, 100);
-		countUp((v) => (displayQuiz = v), quizScore ?? 0, 300);
-		countUp((v) => (displayPitch = v), pitchScore ?? 0, 500);
+		const disposers: Array<() => void> = [];
+
+		disposers.push(countUp((v) => (displayScore = v), finalScore, 100));
+		disposers.push(countUp((v) => (displayQuiz = v), quizScore ?? 0, 300));
+		disposers.push(countUp((v) => (displayPitch = v), pitchScore ?? 0, 500));
+
+		return () => {
+			for (const dispose of disposers) {
+				dispose();
+			}
+		};
 	});
 
 	const modeBadgeStyle = $derived.by(() => {
