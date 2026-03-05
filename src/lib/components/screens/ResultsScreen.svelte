@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount } from 'svelte';
 	import { effectiveRankScore, rankLabelFromScore } from '$lib/state/scoring';
 	import type { GameMode } from '$lib/types/game';
 
@@ -38,8 +38,8 @@
 	function countUp(setter: (v: number) => void, target: number, delay = 0): () => void {
 		if (!target) return () => {};
 
-		let timeoutId: number | null = null;
-		let intervalId: number | null = null;
+		let timeoutId: ReturnType<typeof setTimeout> | null = null;
+		let intervalId: ReturnType<typeof setInterval> | null = null;
 
 		timeoutId = setTimeout(() => {
 			const duration = 700;

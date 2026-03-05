@@ -1,5 +1,11 @@
 import type { GameMode, LeaderboardEntry } from '$lib/types/game';
 
+export interface LocalLeaderboardService {
+	add(entry: LeaderboardEntry): void;
+	list(mode?: GameMode): LeaderboardEntry[];
+	clear(): void;
+}
+
 interface ServiceOptions {
 	storage?: Storage | null;
 	maxEntries?: number;
@@ -22,7 +28,10 @@ function parseEntries(raw: string | null): LeaderboardEntry[] {
 	return [];
 }
 
-export function createLeaderboardService(key: string, options: ServiceOptions = {}) {
+export function createLeaderboardService(
+	key: string,
+	options: ServiceOptions = {}
+): LocalLeaderboardService {
 	const storage =
 		Object.prototype.hasOwnProperty.call(options, 'storage')
 			? (options.storage ?? null)

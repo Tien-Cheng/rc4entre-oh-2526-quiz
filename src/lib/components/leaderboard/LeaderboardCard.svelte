@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { GameMode, LeaderboardEntry } from '$lib/types/game';
+	import type { GameMode, LeaderboardEntry, LeaderboardStatus } from '$lib/types/game';
 
 	type EntriesByMode = Record<GameMode, LeaderboardEntry[]>;
 
@@ -8,9 +8,15 @@
 			hybrid: [],
 			'quiz-only': [],
 			'pitch-only': []
-		} as EntriesByMode
+		} as EntriesByMode,
+		status = {
+			backend: 'local-fallback',
+			healthy: true,
+			message: 'Local fallback mode'
+		} as LeaderboardStatus
 	}: {
 		entriesByMode?: EntriesByMode;
+		status?: LeaderboardStatus;
 	} = $props();
 
 	const modeSections: Array<{ mode: GameMode; label: string }> = [
@@ -20,15 +26,29 @@
 	];
 
 	const medals = ['🥇', '🥈', '🥉'];
+	const statusStyles: Record<string, string> = {
+		cloud: 'background: rgb(0 169 160 / 14%); color: var(--brand-teal);',
+		'local-fallback': 'background: rgb(246 190 45 / 16%); color: var(--brand-amber);'
+	};
+
+	const showStatusChip = $derived.by(() => status.backend !== 'cloud' || !status.healthy);
+	const statusLabel = $derived.by(() => 'Local fallback');
+
+	const statusHint = $derived.by(() =>
+		status.healthy ? status.message ?? 'Leaderboard connected' : status.message ?? 'Sync error'
+	);
 </script>
 
 <div class="glow-card rounded-2xl p-5">
 	<div class="mb-4 flex items-center justify-between">
 		<h3 class="font-['Kanit'] text-lg font-extrabold tracking-wide">Leaderboard By Mode</h3>
-		<span
-			class="rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider"
-			style="background: var(--surface-2); color: var(--ink); opacity: 0.6;"
-		>Local device</span>
+		{#if showStatusChip}
+			<span
+				class="rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider"
+				style="{statusStyles[status.backend]} border: 1px solid rgb(255 255 255 / 10%);"
+				title={statusHint}
+			>{statusLabel}</span>
+		{/if}
 	</div>
 
 	{#if modeSections.every(({ mode }) => entriesByMode[mode].length === 0)}

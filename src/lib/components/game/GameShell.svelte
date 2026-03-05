@@ -6,11 +6,22 @@
 	import { defaultFlowConfig } from '$lib/config/game-defaults';
 	import QuizRunner from '$lib/modules/quiz/QuizRunner.svelte';
 	import PitchRunner from '$lib/modules/pitch/PitchRunner.svelte';
-	import { createLeaderboardService } from '$lib/services/leaderboard';
+	import { leaderboardDefaults, leaderboardModes } from '$lib/config/leaderboard';
+	import {
+		createLeaderboardProvider,
+		type LeaderboardProvider
+	} from '$lib/services/leaderboard-provider';
 	import { createGameFlow } from '$lib/state/game-flow';
 	import { resolveDisplayName } from '$lib/state/player-name';
 	import { combineScore } from '$lib/state/scoring';
-	import type { GameMode, GamePhase, HybridOrder, LeaderboardEntry, ModuleCompletion } from '$lib/types/game';
+	import type {
+		GameMode,
+		GamePhase,
+		HybridOrder,
+		LeaderboardEntry,
+		LeaderboardStatus,
+		ModuleCompletion
+	} from '$lib/types/game';
 
 	let hostOpen = $state(false);
 	let soundEnabled = $state(true);
@@ -24,20 +35,49 @@
 		'quiz-only': [],
 		'pitch-only': []
 	});
+	let leaderboardStatus = $state<LeaderboardStatus>({
+		backend: 'local-fallback',
+		healthy: true,
+		message: 'Local fallback mode'
+	});
 
 	let mode = $state<GameMode>(defaultFlowConfig.mode);
 	let order = $state<HybridOrder>(defaultFlowConfig.order);
 	let pitchBonus = $state(10);
 
 	let flow = createGameFlow({ mode: defaultFlowConfig.mode, order: defaultFlowConfig.order });
-	let leaderboard = createLeaderboardService('rc4entre-leaderboard-v1', { storage: null });
+	let leaderboardProvider: LeaderboardProvider | null = null;
+	let leaderboardSubscriptions: Array<() => void> = [];
 
-	function refreshLeaderboard() {
-		leaderboardEntriesByMode = {
-			hybrid: leaderboard.list('hybrid').slice(0, 5),
-			'quiz-only': leaderboard.list('quiz-only').slice(0, 5),
-			'pitch-only': leaderboard.list('pitch-only').slice(0, 5)
-		};
+	function ensureLeaderboardProvider() {
+		if (leaderboardProvider) {
+			return leaderboardProvider;
+		}
+		leaderboardProvider = createLeaderboardProvider();
+		leaderboardStatus = leaderboardProvider.getStatus();
+		return leaderboardProvider;
+	}
+
+	function stopLeaderboardStreams() {
+		for (const unsubscribe of leaderboardSubscriptions) {
+			unsubscribe();
+		}
+		leaderboardSubscriptions = [];
+	}
+
+	function startLeaderboardStreams() {
+		stopLeaderboardStreams();
+		const provider = ensureLeaderboardProvider();
+		leaderboardSubscriptions = leaderboardModes.map((entryMode) =>
+			provider.subscribeByMode(entryMode, leaderboardDefaults.attractEntries, (entries) => {
+				leaderboardEntriesByMode = {
+					...leaderboardEntriesByMode,
+					[entryMode]: entries.slice(0, leaderboardDefaults.attractEntries)
+				};
+				leaderboardStatus = provider.getStatus();
+			})
+		);
+		leaderboardStatus = provider.getStatus();
 	}
 
 	function openPlayerIntro() {
@@ -55,20 +95,23 @@
 		phase = flow.currentPhase();
 	}
 
-	function computeAndStoreFinalScore() {
+	async function computeAndStoreFinalScore() {
 		finalScore = combineScore({
 			quizScore: completion.quiz?.score,
 			pitchScore: completion.pitch?.score
 		});
 
-		leaderboard.add({
+		const provider = ensureLeaderboardProvider();
+		await provider.submit({
 			name: displayName,
 			mode,
 			score: finalScore,
-			timestamp: Date.now(),
 			breakdown: completion
 		});
-		refreshLeaderboard();
+		leaderboardStatus = provider.getStatus();
+		if (leaderboardStatus.backend === 'local-fallback') {
+			startLeaderboardStreams();
+		}
 	}
 
 	function onQuizComplete(result: NonNullable<ModuleCompletion['quiz']>) {
@@ -76,7 +119,7 @@
 		flow.completeModule('quiz');
 		phase = flow.currentPhase();
 		if (phase === 'results') {
-			computeAndStoreFinalScore();
+			void computeAndStoreFinalScore();
 		}
 	}
 
@@ -85,7 +128,7 @@
 		flow.completeModule('pitch');
 		phase = flow.currentPhase();
 		if (phase === 'results') {
-			computeAndStoreFinalScore();
+			void computeAndStoreFinalScore();
 		}
 	}
 
@@ -96,20 +139,37 @@
 	}
 
 	function clearLeaderboard() {
-		leaderboard.clear();
-		refreshLeaderboard();
+		const provider = ensureLeaderboardProvider();
+		provider.clearLocalFallback();
+		leaderboardStatus = provider.getStatus();
+		startLeaderboardStreams();
 	}
 
 	function toggleHost() {
 		hostOpen = !hostOpen;
 	}
 
+	function isTypingTarget(target: EventTarget | null): boolean {
+		const element = target instanceof HTMLElement ? target : null;
+		if (!element) {
+			return false;
+		}
+
+		if (element.isContentEditable) {
+			return true;
+		}
+
+		return element.closest('input, textarea, select, [contenteditable="true"]') !== null;
+	}
+
 	onMount(() => {
-		leaderboard = createLeaderboardService('rc4entre-leaderboard-v1');
-		refreshLeaderboard();
+		startLeaderboardStreams();
 
 		const onKeyDown = (event: KeyboardEvent) => {
-			if (event.key.toLowerCase() === 'h') {
+			if (event.metaKey || event.ctrlKey || event.altKey || isTypingTarget(event.target)) {
+				return;
+			}
+			if (event.shiftKey && event.key.toLowerCase() === 'h') {
 				event.preventDefault();
 				toggleHost();
 			}
@@ -119,6 +179,7 @@
 	});
 
 	onDestroy(() => {
+		stopLeaderboardStreams();
 		hostOpen = false;
 	});
 </script>
@@ -143,7 +204,11 @@
 />
 
 {#if phase === 'attract'}
-	<AttractScreen onStart={openPlayerIntro} entriesByMode={leaderboardEntriesByMode} />
+	<AttractScreen
+		onStart={openPlayerIntro}
+		entriesByMode={leaderboardEntriesByMode}
+		leaderboardStatus={leaderboardStatus}
+	/>
 {:else if phase === 'player-intro'}
 	<div class="mx-auto flex min-h-dvh w-full max-w-3xl items-center px-5 py-8">
 		<div class="glow-card w-full rounded-3xl p-7" style="animation: fadeInUp 300ms ease both;">

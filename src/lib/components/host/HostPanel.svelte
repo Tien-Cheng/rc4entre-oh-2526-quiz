@@ -32,12 +32,12 @@
 		onClose?: () => void;
 	} = $props();
 
-function handleWindowKeydown(event: KeyboardEvent) {
-	if (open && event.key === 'Escape') {
-		event.preventDefault();
-		onClose();
+	function handleWindowKeydown(event: KeyboardEvent) {
+		if (open && event.key === 'Escape') {
+			event.preventDefault();
+			onClose();
+		}
 	}
-}
 </script>
 
 <svelte:window onkeydown={handleWindowKeydown} />
@@ -77,7 +77,9 @@ function handleWindowKeydown(event: KeyboardEvent) {
 					Sound: {soundEnabled ? 'On' : 'Off'}
 				</button>
 				<button class="btn btn-outline rounded-xl" onclick={onResetRound}>Reset Current</button>
-				<button class="btn btn-outline btn-error rounded-xl" onclick={onClearLeaderboard}>Clear Board</button>
+				<button class="btn btn-outline btn-error rounded-xl" onclick={onClearLeaderboard}>
+					Clear Local Board
+				</button>
 			</div>
 		</div>
 	</div>

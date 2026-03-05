@@ -60,3 +60,23 @@ export interface LeaderboardEntry {
 	timestamp: number;
 	breakdown?: ModuleCompletion;
 }
+
+export type LeaderboardBackend = 'cloud' | 'local-fallback';
+
+export interface LeaderboardStatus {
+	backend: LeaderboardBackend;
+	healthy: boolean;
+	message?: string;
+}
+
+export interface LeaderboardSubmitInput {
+	name: string;
+	mode: GameMode;
+	score: number;
+	breakdown?: ModuleCompletion;
+}
+
+export interface LeaderboardReadOptions {
+	mode?: GameMode;
+	limit?: number;
+}
