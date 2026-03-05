@@ -122,6 +122,33 @@ describe('leaderboard provider', () => {
 		});
 	});
 
+	it('keeps local fallback view when reads are healthy but writes are broken', async () => {
+		const local = createLocalStub();
+		const provider = createLeaderboardProvider({
+			mode: 'cloud',
+			localService: local.service,
+			cloudClient: {
+				isConfigured: () => true,
+				submit: vi.fn(async () => {
+					throw new Error('submit failed');
+				}),
+				subscribeByMode: (_mode, _limit, onUpdate) => {
+					onUpdate([{ name: 'CloudOnly', mode: 'hybrid', score: 100, timestamp: 9 }]);
+					return () => {};
+				}
+			}
+		});
+
+		await provider.submit(sampleEntry('hybrid'));
+		let latest: LeaderboardEntry[] = [];
+		provider.subscribeByMode('hybrid', 5, (entries) => {
+			latest = entries;
+		});
+
+		expect(latest[0]?.name).toBe('Player');
+		expect(provider.getStatus().backend).toBe('local-fallback');
+	});
+
 	it('clearLocalFallback only affects local storage', () => {
 		const local = createLocalStub();
 		local.service.add({ name: 'A', mode: 'hybrid', score: 50, timestamp: 1 });

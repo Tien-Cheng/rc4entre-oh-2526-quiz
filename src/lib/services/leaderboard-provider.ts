@@ -52,6 +52,7 @@ export function createLeaderboardProvider(options: ProviderOptions = {}): Leader
 		});
 	const cloudClient = options.cloudClient ?? createFirebaseLeaderboardClient();
 	let status = defaultStatus(featureMode, browser && cloudClient.isConfigured());
+	let writeSyncBroken = false;
 
 	function useLocalFallback(message: string, healthy: boolean) {
 		status = { backend: 'local-fallback', healthy, message };
@@ -59,16 +60,18 @@ export function createLeaderboardProvider(options: ProviderOptions = {}): Leader
 
 	return {
 		async submit(entry: LeaderboardSubmitInput) {
-			if (featureMode === 'local' || !browser || status.backend === 'local-fallback') {
+			if (featureMode === 'local' || !browser) {
 				localService.add({ ...entry, timestamp: Date.now() });
 				return;
 			}
 
 			try {
 				await cloudClient.submit(entry);
+				writeSyncBroken = false;
 				status = { backend: 'cloud', healthy: true, message: 'Realtime sync active' };
 			} catch {
 				localService.add({ ...entry, timestamp: Date.now() });
+				writeSyncBroken = true;
 				useLocalFallback('Sync error. Saving scores locally.', false);
 			}
 		},
@@ -91,6 +94,11 @@ export function createLeaderboardProvider(options: ProviderOptions = {}): Leader
 					mode,
 					limit,
 					(entries) => {
+						if (writeSyncBroken) {
+							useLocalFallback('Sync error. Saving scores locally.', false);
+							localPush();
+							return;
+						}
 						status = { backend: 'cloud', healthy: true, message: 'Realtime sync active' };
 						onUpdate(entries);
 					},
