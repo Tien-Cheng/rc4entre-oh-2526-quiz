@@ -78,38 +78,74 @@
 
 {#if currentQuestion}
 	<div class="mx-auto flex min-h-dvh w-full max-w-5xl items-center px-5 py-7">
-		<div class="glow-card w-full rounded-3xl p-6 md:p-8">
-			<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
-				<p class="text-xs uppercase tracking-[0.2em] opacity-70">
-					Quiz · Question {currentQuestionNumber} / {questionLimit}
-				</p>
-				<p class="badge badge-warning badge-lg">{remainingSeconds}s</p>
+		<div class="glow-card w-full rounded-3xl p-6 md:p-8" style="animation: fadeInUp 300ms ease both;">
+			<!-- Header row -->
+			<div class="mb-3 flex flex-wrap items-center justify-between gap-3">
+				<p class="label-cap">Quiz · Question {currentQuestionNumber} / {questionLimit}</p>
+				<div
+					class="rounded-full px-3 py-1 text-sm font-bold tabular-nums transition-colors duration-500"
+					style="
+						background: {remainingSeconds <= 5 ? 'rgb(243 90 58 / 18%)' : remainingSeconds <= 8 ? 'rgb(246 190 45 / 18%)' : 'rgb(255 255 255 / 8%)'};
+						color: {remainingSeconds <= 5 ? 'var(--brand-coral)' : remainingSeconds <= 8 ? 'var(--brand-amber)' : 'var(--ink)'};
+						{remainingSeconds <= 5 ? 'animation: pulseGlow 900ms ease infinite;' : ''}
+					"
+				>{remainingSeconds}s</div>
 			</div>
 
-			<progress class="progress progress-warning mb-5 w-full" value={remainingSeconds} max={secondsPerQuestion}></progress>
+			<!-- Custom progress bar -->
+			<div class="timer-bar-track mb-5">
+				<div
+					class="timer-bar-fill"
+					style="
+						width: {(remainingSeconds / secondsPerQuestion) * 100}%;
+						background: {remainingSeconds <= 4
+							? 'var(--brand-coral)'
+							: remainingSeconds <= 8
+								? 'linear-gradient(90deg, var(--brand-amber), var(--brand-coral))'
+								: 'linear-gradient(90deg, var(--brand-teal), var(--brand-amber))'};
+					"
+				></div>
+			</div>
 
-			<h2 class="font-['Kanit'] text-3xl font-bold leading-tight md:text-4xl">{currentQuestion.prompt}</h2>
+			<!-- Question -->
+			{#key currentQuestionNumber}
+				<h2
+					class="font-['Kanit'] text-4xl font-extrabold leading-tight md:text-5xl"
+					style="animation: fadeInUp 280ms ease both;"
+				>{currentQuestion.prompt}</h2>
+			{/key}
 
-			<div class="mt-5 grid gap-3 md:grid-cols-2">
+			<!-- Answer grid -->
+			<div class="mt-6 grid gap-3 md:grid-cols-2">
 				{#each currentQuestion.options as option, idx}
+					{@const label = ['A', 'B', 'C', 'D'][idx]}
+					{@const isCorrect = isLocked && idx === currentQuestion.answerIndex}
+					{@const isWrong = isLocked && selectedIndex === idx && idx !== currentQuestion.answerIndex}
 					<button
-						class="btn h-auto min-h-16 rounded-2xl justify-start whitespace-normal px-4 py-3 text-left text-sm md:text-base {isLocked && idx === currentQuestion.answerIndex
-							? 'btn-success'
-							: isLocked && selectedIndex === idx && selectedIndex !== currentQuestion.answerIndex
-								? 'btn-error'
-								: 'btn-outline'}"
+						class="answer-btn {isCorrect ? 'answer-btn-correct' : isWrong ? 'answer-btn-wrong' : ''}"
 						onclick={() => handleAnswer(idx)}
 						disabled={isLocked}
 					>
-						{option}
+						<span class="answer-btn-label">{label}</span>
+						<span class="text-sm md:text-base">{option}</span>
 					</button>
 				{/each}
 			</div>
 
+			<!-- Explanation -->
 			{#if isLocked}
-				<p class="mt-4 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm opacity-90">
+				<div
+					class="mt-4 rounded-xl border px-4 py-3 text-sm"
+					style="
+						border-color: var(--border-soft);
+						background: var(--surface-2);
+						border-left: 3px solid var(--brand-teal);
+						animation: fadeInUp 300ms ease both;
+					"
+				>
+					<span class="label-cap block mb-1">Explanation</span>
 					{currentQuestion.explanation}
-				</p>
+				</div>
 			{/if}
 		</div>
 	</div>

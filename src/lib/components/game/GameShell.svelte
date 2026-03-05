@@ -146,22 +146,33 @@
 	<AttractScreen onStart={openPlayerIntro} entriesByMode={leaderboardEntriesByMode} />
 {:else if phase === 'player-intro'}
 	<div class="mx-auto flex min-h-dvh w-full max-w-3xl items-center px-5 py-8">
-		<div class="glow-card w-full rounded-3xl p-7">
-			<p class="text-xs uppercase tracking-[0.2em] opacity-70">Player Setup</p>
-			<h2 class="mt-1 font-['Kanit'] text-4xl font-extrabold">Ready to pitch your future?</h2>
-			<label class="mt-5 block">
-				<span class="mb-2 block text-sm opacity-80">Name (optional)</span>
+		<div class="glow-card w-full rounded-3xl p-7" style="animation: fadeInUp 300ms ease both;">
+			<p class="label-cap">Player Setup</p>
+			<h2 class="mt-1 font-['Kanit'] text-4xl font-extrabold md:text-5xl">Ready to pitch<br />your future?</h2>
+			<label class="mt-6 block">
+				<span class="mb-2 block text-sm font-medium opacity-80">Your name (optional)</span>
 				<input
 					type="text"
-					class="input input-bordered w-full rounded-xl bg-white/5"
+					class="w-full rounded-xl px-4 py-3 text-base transition-all duration-200 name-input"
+					style="
+						background: var(--surface-2);
+						border: 1px solid var(--border-soft);
+						color: var(--ink);
+						outline: none;
+						font-family: inherit;
+					"
 					bind:value={playerName}
 					maxlength="24"
 					placeholder="Your name"
 				/>
 			</label>
 			<div class="mt-6 flex flex-wrap gap-3">
-				<button class="btn brand-btn rounded-xl px-8" onclick={startRound}>Start Round</button>
-				<button class="btn btn-outline rounded-xl" onclick={() => (phase = 'attract')}>Back</button>
+				<button class="btn brand-btn rounded-xl px-8" onclick={startRound}>Start Round →</button>
+				<button
+					class="rounded-xl px-6 py-2 text-sm font-semibold back-btn"
+					style="background: var(--surface-2); border: 1px solid var(--border-soft); color: var(--ink);"
+					onclick={() => (phase = 'attract')}
+				>← Back</button>
 			</div>
 		</div>
 	</div>

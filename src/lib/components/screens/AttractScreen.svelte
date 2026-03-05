@@ -40,37 +40,61 @@
 </script>
 
 <div class="mx-auto grid min-h-dvh max-w-6xl grid-cols-1 gap-6 px-5 py-6 md:grid-cols-[1.2fr_0.8fr] md:items-center">
-	<section class="glow-card relative overflow-hidden rounded-3xl p-6 md:p-8">
+	<section class="glow-card relative overflow-hidden rounded-3xl p-6 md:p-8" style="animation: fadeInUp 350ms ease both;">
+		<!-- Decorative blobs -->
 		<div
-			class="pointer-events-none absolute -right-14 -top-14 h-48 w-48 rounded-full"
-			style="background: radial-gradient(circle, rgb(246 190 45 / 45%), transparent 62%);"
+			class="pointer-events-none absolute -right-12 -top-12 h-52 w-52 rounded-full"
+			style="background: radial-gradient(circle, rgb(246 190 45 / 40%), transparent 65%);"
 		></div>
-		<img src={`${base}/assets/rc4-entre-logo.png`} alt="RC4Entre logo" class="mb-5 h-24 w-auto" />
-		<p class="mb-2 text-xs uppercase tracking-[0.25em] text-[var(--brand-amber)]">RC4 Open House 2026</p>
-		<h1 class="font-['Kanit'] text-4xl font-extrabold leading-tight md:text-6xl">Startup Sprint Arena</h1>
-		<p class="mt-3 max-w-xl text-base/7 opacity-90 md:text-lg">
-			Answer rapid-fire startup questions, then pitch a random product to a wild audience. Finish in 2
-			minutes and climb the board.
-		</p>
+		<div
+			class="pointer-events-none absolute -bottom-10 -left-10 h-36 w-36 rounded-full"
+			style="background: radial-gradient(circle, rgb(0 169 160 / 30%), transparent 65%);"
+		></div>
 
-		<div class="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4">
-			<p class="text-xs uppercase tracking-[0.2em] opacity-70">Startup fact</p>
-			<p class="mt-2 text-lg font-semibold text-[var(--brand-amber)]">{startupFacts[factIndex]}</p>
+		<img src={`${base}/assets/rc4-entre-logo.png`} alt="RC4Entre logo" class="relative mb-5 h-12 w-auto" />
+		<p class="label-cap relative mb-2 text-[var(--brand-amber)]">RC4 Open House 2026</p>
+		<h1
+			class="relative font-['Kanit'] text-5xl font-extrabold leading-[1.05] md:text-7xl"
+			style="animation: fadeInUp 400ms 80ms ease both;"
+		>Startup Sprint<br />Arena</h1>
+
+		<!-- Teal accent bar + description -->
+		<div class="relative mt-4 flex gap-4">
+			<div class="mt-1 h-auto w-[3px] flex-shrink-0 rounded-full" style="background: linear-gradient(to bottom, var(--brand-teal), transparent);"></div>
+			<p class="text-base/7 opacity-85 md:text-lg">
+				Answer rapid-fire startup questions, then pitch a random product to a wild audience. Finish in 2 minutes and climb the board.
+			</p>
 		</div>
 
-		<div class="mt-7 flex flex-wrap gap-3">
-			<button class="btn brand-btn btn-lg rounded-xl px-8" onclick={() => onStart()}>Play in 2 minutes</button>
+		<!-- Startup fact card with crossfade -->
+		<div class="relative mt-6 rounded-2xl border p-4" style="border-color: var(--border-soft); background: var(--surface-2);">
+			<p class="label-cap">Startup fact</p>
+			{#key factIndex}
+				<p class="fact-text mt-2 text-base font-semibold text-[var(--brand-amber)]">{startupFacts[factIndex]}</p>
+			{/key}
+		</div>
+
+		<div class="relative mt-7 flex flex-wrap gap-3">
+			<button class="btn brand-btn btn-lg rounded-xl px-9" onclick={() => onStart()}>
+				Play in 2 minutes →
+			</button>
 		</div>
 	</section>
 
-	<section class="space-y-5">
+	<section class="space-y-4" style="animation: fadeInUp 350ms 120ms ease both;">
 		<LeaderboardCard {entriesByMode} />
-		<div class="glow-card rounded-2xl p-4">
-			<p class="text-xs uppercase tracking-[0.2em] opacity-70">How to play</p>
-			<ol class="mt-3 list-decimal space-y-1 pl-4 text-sm opacity-90">
-				<li>Enter your name and start your round.</li>
-				<li>Finish quiz and/or pitch depending on host mode.</li>
-				<li>Top score earns RC4Entre bragging rights and prizes.</li>
+		<div class="glow-card rounded-2xl p-5">
+			<p class="label-cap mb-3">How to play</p>
+			<ol class="space-y-3">
+				{#each ['Enter your name and start your round.', 'Finish quiz and/or pitch depending on host mode.', 'Top score earns RC4Entre bragging rights and prizes.'] as step, i}
+					<li class="flex items-start gap-3 text-sm opacity-90">
+						<span
+							class="mt-0.5 grid h-5 w-5 flex-shrink-0 place-items-center rounded-full text-[10px] font-bold"
+							style="background: var(--brand-teal); color: #003330;"
+						>{i + 1}</span>
+						{step}
+					</li>
+				{/each}
 			</ol>
 		</div>
 	</section>

@@ -18,36 +18,48 @@
 		{ mode: 'quiz-only', label: 'Quiz Only' },
 		{ mode: 'pitch-only', label: 'Pitch Only' }
 	];
+
+	const medals = ['🥇', '🥈', '🥉'];
 </script>
 
-<div class="glow-card rounded-2xl p-4">
-	<div class="mb-3 flex items-center justify-between">
-		<h3 class="font-['Kanit'] text-lg font-bold tracking-wide">Leaderboard By Mode</h3>
-		<span class="badge badge-outline text-xs">Local device</span>
+<div class="glow-card rounded-2xl p-5">
+	<div class="mb-4 flex items-center justify-between">
+		<h3 class="font-['Kanit'] text-lg font-extrabold tracking-wide">Leaderboard By Mode</h3>
+		<span
+			class="rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider"
+			style="background: var(--surface-2); color: var(--ink); opacity: 0.6;"
+		>Local device</span>
 	</div>
 
 	{#if modeSections.every(({ mode }) => entriesByMode[mode].length === 0)}
-		<p class="text-sm opacity-70">No players yet. Be the first to set the bar.</p>
+		<p class="text-sm opacity-60">No players yet. Be the first to set the bar.</p>
 	{:else}
-		<div class="space-y-4">
+		<div class="space-y-3">
 			{#each modeSections as { mode, label }}
-				<div class="rounded-xl border border-white/10 bg-white/5 p-3">
+				<div class="rounded-xl p-3" style="background: var(--surface-2); border: 1px solid var(--border-soft);">
 					<div class="mb-2 flex items-center justify-between">
-						<p class="text-xs uppercase tracking-[0.2em] opacity-70">{label}</p>
-						<span class="badge badge-outline badge-xs">{entriesByMode[mode].length} entries</span>
+						<p class="label-cap">{label}</p>
+						<span class="text-[10px] opacity-50">{entriesByMode[mode].length} entries</span>
 					</div>
 
 					{#if entriesByMode[mode].length === 0}
-						<p class="text-xs opacity-60">No scores yet.</p>
+						<p class="text-xs opacity-50">No scores yet.</p>
 					{:else}
-						<div class="space-y-2">
+						<div class="space-y-1">
 							{#each entriesByMode[mode] as entry, idx}
-								<div class="flex items-center justify-between rounded-xl bg-white/5 px-3 py-2 text-sm">
+								<div
+									class="flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors"
+									style="{idx === 0 ? 'background: rgb(0 169 160 / 10%); border: 1px solid rgb(0 169 160 / 20%);' : 'background: rgb(255 255 255 / 4%);'}"
+								>
 									<div class="flex items-center gap-2">
-										<span class="badge badge-sm badge-neutral">#{idx + 1}</span>
+										{#if idx < 3}
+											<span class="text-sm leading-none">{medals[idx]}</span>
+										{:else}
+											<span class="w-5 text-center text-xs opacity-50">#{idx + 1}</span>
+										{/if}
 										<span class="font-semibold">{entry.name}</span>
 									</div>
-									<span class="font-bold text-[var(--brand-amber)]">{entry.score}</span>
+									<span class="font-bold tabular-nums text-[var(--brand-amber)]">{entry.score}</span>
 								</div>
 							{/each}
 						</div>
