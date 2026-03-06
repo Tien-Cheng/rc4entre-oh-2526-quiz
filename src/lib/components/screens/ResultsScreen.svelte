@@ -8,6 +8,9 @@
 		mode,
 		finalScore,
 		quizScore,
+		pitchBaseScore,
+		pitchTimeBonus,
+		pitchHostBonus,
 		pitchScore,
 		onNextPlayer = () => {}
 	}: {
@@ -15,6 +18,9 @@
 		mode: GameMode;
 		finalScore: number;
 		quizScore?: number;
+		pitchBaseScore?: number;
+		pitchTimeBonus?: number;
+		pitchHostBonus?: number;
 		pitchScore?: number;
 		onNextPlayer?: () => void;
 	} = $props();
@@ -133,6 +139,11 @@
 				>
 					<p class="label-cap">Pitch Score</p>
 					<p class="mt-2 font-['Kanit'] text-4xl font-extrabold text-[var(--brand-amber)]">{displayPitch}</p>
+					{#if pitchBaseScore !== undefined && pitchTimeBonus !== undefined && pitchHostBonus !== undefined}
+						<p class="mt-2 text-sm opacity-80">
+							{pitchBaseScore} base + {pitchTimeBonus} time + {pitchHostBonus} host bonus
+						</p>
+					{/if}
 				</div>
 			{/if}
 			{#if quizScore === undefined && pitchScore === undefined}

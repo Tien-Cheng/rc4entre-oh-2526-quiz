@@ -6,17 +6,24 @@
 	let {
 		questionLimit,
 		secondsPerQuestion,
+		answerFeedbackMs,
 		onComplete = (_result: QuizResult) => {}
 	}: {
 		questionLimit: number;
 		secondsPerQuestion: number;
+		answerFeedbackMs: number;
 		onComplete?: (result: QuizResult) => void;
 	} = $props();
 
-	const session = createQuizSession({ questionLimit, secondsPerQuestion });
+	const initialQuestionLimit = questionLimit;
+	const initialSecondsPerQuestion = secondsPerQuestion;
+	const session = createQuizSession({
+		questionLimit: initialQuestionLimit,
+		secondsPerQuestion: initialSecondsPerQuestion
+	});
 	let currentQuestion = $state(session.currentQuestion());
 	let currentQuestionNumber = $state(session.questionIndex() + 1);
-	let remainingSeconds = $state(secondsPerQuestion);
+	let remainingSeconds = $state(initialSecondsPerQuestion);
 	let selectedIndex = $state<number | null>(null);
 	let isLocked = $state(false);
 	let timer: ReturnType<typeof setInterval> | null = null;
@@ -30,7 +37,7 @@
 
 	function startTimer() {
 		clearTimer();
-		remainingSeconds = secondsPerQuestion;
+		remainingSeconds = initialSecondsPerQuestion;
 		timer = setInterval(() => {
 			remainingSeconds = Math.max(0, remainingSeconds - 1);
 			if (remainingSeconds === 0) {
@@ -64,7 +71,7 @@
 
 		setTimeout(() => {
 			moveNext();
-		}, 800);
+		}, answerFeedbackMs);
 	}
 
 	onMount(() => {
@@ -97,7 +104,7 @@
 				<div
 					class="timer-bar-fill"
 					style="
-						width: {(remainingSeconds / secondsPerQuestion) * 100}%;
+						width: {(remainingSeconds / initialSecondsPerQuestion) * 100}%;
 						background: {remainingSeconds <= 4
 							? 'var(--brand-coral)'
 							: remainingSeconds <= 8

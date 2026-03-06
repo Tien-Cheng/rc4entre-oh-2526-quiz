@@ -42,7 +42,7 @@
 
 	<div>
 		<div class="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.2em] opacity-70">
-			<span>Pitch bonus</span>
+			<span>Host pitch bonus</span>
 			<span class="font-semibold normal-case">+{pitchBonus}</span>
 		</div>
 		<input
@@ -54,6 +54,7 @@
 			value={pitchBonus}
 			oninput={(event) => onPitchBonusChange(Number((event.currentTarget as HTMLInputElement).value))}
 		/>
+		<p class="mt-2 text-xs opacity-70">Pitch score = 50 base + up to 20 time bonus + this host-awarded bonus.</p>
 	</div>
 
 	<button class="btn brand-btn w-full rounded-xl" onclick={onStart}>Start Next Player</button>

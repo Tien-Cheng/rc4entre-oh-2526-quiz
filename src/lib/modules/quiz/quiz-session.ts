@@ -8,8 +8,28 @@ interface QuizSessionOptions {
 	questions?: QuizQuestion[];
 }
 
+function shuffleQuestionOptions(question: QuizQuestion): QuizQuestion {
+	const entries = question.options.map((option, index) => ({
+		option,
+		isAnswer: index === question.answerIndex
+	}));
+
+	for (let i = entries.length - 1; i > 0; i -= 1) {
+		const swapIndex = Math.floor(Math.random() * (i + 1));
+		[entries[i], entries[swapIndex]] = [entries[swapIndex], entries[i]];
+	}
+
+	return {
+		...question,
+		options: entries.map((entry) => entry.option),
+		answerIndex: entries.findIndex((entry) => entry.isAnswer)
+	};
+}
+
 export function createQuizSession(options: QuizSessionOptions) {
-	const questions = (options.questions ?? quizQuestions).slice(0, options.questionLimit);
+	const questions = (options.questions ?? quizQuestions)
+		.slice(0, options.questionLimit)
+		.map(shuffleQuestionOptions);
 	let index = 0;
 	let correctAnswers = 0;
 	let secondsRemainingTotal = 0;
