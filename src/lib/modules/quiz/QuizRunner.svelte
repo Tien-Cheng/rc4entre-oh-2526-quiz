@@ -142,13 +142,8 @@
 			<!-- Explanation -->
 			{#if isLocked}
 				<div
-					class="mt-4 rounded-xl border px-4 py-3 text-sm"
-					style="
-						border-color: var(--border-soft);
-						background: var(--surface-2);
-						border-left: 3px solid var(--brand-teal);
-						animation: fadeInUp 300ms ease both;
-					"
+					class="surface-card accent-left-teal mt-4 px-4 py-3 text-sm"
+					style="animation: fadeSlideIn 300ms ease both;"
 				>
 					<span class="label-cap block mb-1">Explanation</span>
 					{currentQuestion.explanation}

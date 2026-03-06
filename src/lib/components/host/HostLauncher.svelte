@@ -16,7 +16,7 @@
 	} = $props();
 </script>
 
-<div class="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+<div class="surface-card space-y-4 rounded-2xl p-4">
 	<div>
 		<p class="text-xs uppercase tracking-[0.2em] opacity-70">Mode</p>
 		<div class="mt-2 grid grid-cols-2 gap-2">
