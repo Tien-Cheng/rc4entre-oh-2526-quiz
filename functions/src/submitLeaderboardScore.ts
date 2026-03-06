@@ -35,7 +35,12 @@ function validatePayload(payload: Payload) {
 	}
 }
 
-export const submitLeaderboardScore = onCall({ enforceAppCheck: true }, async (request) => {
+export const submitLeaderboardScore = onCall(
+	{
+		enforceAppCheck: true,
+		invoker: 'public'
+	},
+	async (request) => {
 	const payload = (request.data ?? {}) as Payload;
 	if (!request.app) {
 		throw new HttpsError('failed-precondition', 'App Check token is required');
@@ -60,7 +65,8 @@ export const submitLeaderboardScore = onCall({ enforceAppCheck: true }, async (r
 
 	await getFirestore().collection('leaderboard_entries').add(entry);
 	return { ok: true };
-});
+	}
+);
 
 export const leaderboardValidation = {
 	sanitizeName,
