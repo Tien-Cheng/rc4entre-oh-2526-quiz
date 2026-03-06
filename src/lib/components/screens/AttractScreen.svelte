@@ -22,10 +22,11 @@
 	} = $props();
 
 	const startupFacts = [
+		'RC4Entre is where curious builders meet ideas, teammates, and startup energy.',
 		'Airbnb started by renting air mattresses to conference visitors.',
-		'Grab began as MyTeksi and scaled across Southeast Asia.',
+		'RC4Entre puts you close to pitches, projects, and entrepreneurial conversations.',
 		'Great startups often start with one narrow beachhead market.',
-		'Pitch clarity beats buzzwords in early-stage fundraising.'
+		'Pitch clarity beats buzzwords, and RC4Entre gives you space to practice both.'
 	];
 
 	let factIndex = $state(0);
@@ -64,10 +65,10 @@
 		>Startup Sprint<br />Arena</h1>
 
 		<!-- Teal accent bar + description -->
-		<div class="relative mt-4 flex gap-4">
+			<div class="relative mt-4 flex gap-4">
 			<div class="mt-1 h-auto w-[3px] flex-shrink-0 rounded-full" style="background: linear-gradient(to bottom, var(--brand-teal), transparent);"></div>
 			<p class="text-base/7 opacity-85 md:text-lg">
-				Answer rapid-fire startup questions, then try a random pitch challenge. Quiz score decides the leaderboard.
+				Answer rapid-fire startup questions, try a random pitch challenge, and get a quick feel for the builder energy behind RC4Entre.
 			</p>
 		</div>
 
@@ -84,6 +85,9 @@
 				Play in 2 minutes →
 			</button>
 		</div>
+		<p class="relative mt-3 text-sm opacity-75 md:text-base">
+			A fast way to discover the people, ideas, and startup vibe around RC4Entre.
+		</p>
 	</section>
 
 	<section class="space-y-4" style="animation: fadeInUp 350ms 120ms ease both;">

@@ -19,6 +19,13 @@
 
 	const rank = $derived(rankLabelFromScore(finalScore));
 
+	const identityLine = $derived.by(() => {
+		if (finalScore >= 90) return 'You think like a venture scout who spots opportunities fast.';
+		if (finalScore >= 75) return 'You bring the energy of a builder who can turn ideas into action.';
+		if (finalScore >= 55) return 'You have the instincts of a problem-finder who asks the right questions.';
+		return 'You already have the curiosity that makes startup communities fun to explore.';
+	});
+
 	// Count-up animation
 	let displayScore = $state(0);
 	let displayQuiz = $state(0);
@@ -101,6 +108,8 @@
 			>{mode}</span>
 		</div>
 
+		<p class="mt-4 max-w-2xl text-base/7 opacity-90 md:text-lg">{identityLine}</p>
+
 		<!-- Score breakdown -->
 		<div class="mt-6 grid gap-3">
 			{#if quizScore !== undefined}
@@ -129,10 +138,15 @@
 			class="mt-7 rounded-2xl border p-5"
 			style="border-color: rgb(0 169 160 / 45%); background: rgb(0 169 160 / 8%); animation: borderPulse 2.5s ease infinite;"
 		>
-			<p class="text-sm font-bold">Join RC4Entre →</p>
+			<p class="text-sm font-bold">Talk to the RC4Entre booth team →</p>
 			<p class="mt-1 text-sm opacity-85">
-				Ask our booth team about startup competitions, grants, and community projects.
+				Ask us what RC4Entre actually does and how students get involved in the builder community.
 			</p>
+			<div class="mt-4 grid gap-2 text-sm opacity-85 md:grid-cols-3">
+				<p>Meet people who like building ideas into real projects.</p>
+				<p>Hear about startup events, pitches, and entrepreneurial experiences.</p>
+				<p>Follow up at the booth first, then scan for more info if you want details later.</p>
+			</div>
 		</div>
 
 		<button class="btn brand-btn mt-7 rounded-xl px-8 text-base" onclick={onNextPlayer}>
