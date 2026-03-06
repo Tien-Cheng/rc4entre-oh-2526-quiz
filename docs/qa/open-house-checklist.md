@@ -26,6 +26,6 @@
 
 ## End of event
 
-1. Capture top scores for records/prizes.
+1. Capture top scores for records if needed.
 2. Take screenshots of leaderboard if needed.
 3. Close tab and pack booth setup.

@@ -12,7 +12,7 @@ describe('LeaderboardCard', () => {
 		expect(screen.getByText('Local fallback')).toBeInTheDocument();
 	});
 
-	it('renders only hybrid and quiz-only sections', () => {
+	it('merges all quiz leaderboard entries into one sorted list', () => {
 		render(LeaderboardCard, {
 			entriesByMode: {
 				hybrid: [{ name: 'Hybrid Hero', mode: 'hybrid', score: 88, timestamp: 1 }],
@@ -20,8 +20,14 @@ describe('LeaderboardCard', () => {
 			}
 		});
 
-		expect(screen.getByText('Hybrid')).toBeInTheDocument();
-		expect(screen.getByText('Quiz Only')).toBeInTheDocument();
-		expect(screen.queryByText('Pitch Only')).not.toBeInTheDocument();
+		expect(screen.getByText('Leaderboard')).toBeInTheDocument();
+		expect(screen.getByText('Quiz Scores')).toBeInTheDocument();
+		expect(screen.getByText('2 entries')).toBeInTheDocument();
+		expect(screen.queryByText('Hybrid')).not.toBeInTheDocument();
+		expect(screen.queryByText('Quiz Only')).not.toBeInTheDocument();
+		expect(screen.getAllByText(/Hybrid Hero|Quiz Ace/).map((node) => node.textContent)).toEqual([
+			'Quiz Ace',
+			'Hybrid Hero'
+		]);
 	});
 });
