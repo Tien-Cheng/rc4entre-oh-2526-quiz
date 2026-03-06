@@ -144,7 +144,7 @@
 			<div class="mt-4 grid gap-2 text-sm opacity-85 md:grid-cols-3">
 				<p>Meet people who like building ideas into real projects.</p>
 				<p>Hear about startup events, pitches, and entrepreneurial experiences.</p>
-				<p>Follow up at the booth first, then scan for more info if you want details later.</p>
+				<p>Follow up at the booth and find more info there.</p>
 			</div>
 		</div>
 
