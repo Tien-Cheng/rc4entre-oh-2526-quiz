@@ -166,12 +166,16 @@
 		startLeaderboardStreams();
 
 		const onKeyDown = (event: KeyboardEvent) => {
-			if (event.metaKey || event.ctrlKey || event.altKey || isTypingTarget(event.target)) {
+			if (event.metaKey || event.ctrlKey || event.altKey) {
 				return;
 			}
 			if (event.shiftKey && event.key.toLowerCase() === 'h') {
 				event.preventDefault();
 				toggleHost();
+				return;
+			}
+			if (isTypingTarget(event.target)) {
+				return;
 			}
 		};
 		window.addEventListener('keydown', onKeyDown);
