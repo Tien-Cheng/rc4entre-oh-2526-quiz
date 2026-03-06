@@ -12,7 +12,12 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test:unit": "vitest run",
 		"test:watch": "vitest",
-		"lint": "pnpm run check"
+		"lint": "pnpm run check",
+		"functions:build": "pnpm --dir functions build",
+		"functions:test": "pnpm --dir functions test"
+	},
+	"dependencies": {
+		"firebase": "^12.3.0"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^7.0.0",

@@ -2,7 +2,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { base } from '$app/paths';
 	import LeaderboardCard from '$lib/components/leaderboard/LeaderboardCard.svelte';
-	import type { GameMode, LeaderboardEntry } from '$lib/types/game';
+	import type { GameMode, LeaderboardEntry, LeaderboardStatus } from '$lib/types/game';
 
 	let {
 		onStart = () => {},
@@ -10,10 +10,16 @@
 			hybrid: [],
 			'quiz-only': [],
 			'pitch-only': []
-		} as Record<GameMode, LeaderboardEntry[]>
+		} as Record<GameMode, LeaderboardEntry[]>,
+		leaderboardStatus = {
+			backend: 'local-fallback',
+			healthy: true,
+			message: 'Local fallback mode'
+		} as LeaderboardStatus
 	}: {
 		onStart?: () => void;
 		entriesByMode?: Record<GameMode, LeaderboardEntry[]>;
+		leaderboardStatus?: LeaderboardStatus;
 	} = $props();
 
 	const startupFacts = [
@@ -82,7 +88,7 @@
 	</section>
 
 	<section class="space-y-4" style="animation: fadeInUp 350ms 120ms ease both;">
-		<LeaderboardCard {entriesByMode} />
+		<LeaderboardCard {entriesByMode} status={leaderboardStatus} />
 		<div class="glow-card rounded-2xl p-5">
 			<p class="label-cap mb-3">How to play</p>
 			<ol class="space-y-3">

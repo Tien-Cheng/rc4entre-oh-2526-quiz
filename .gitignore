@@ -1,4 +1,8 @@
 node_modules
+.pnpm-store
+functions/dist
+functions/.svelte-kit
+.firebase
 
 # Output
 .output
