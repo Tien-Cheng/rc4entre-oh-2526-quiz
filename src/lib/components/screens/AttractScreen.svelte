@@ -45,22 +45,22 @@
 	});
 </script>
 
-<div class="mx-auto grid min-h-dvh max-w-6xl grid-cols-1 gap-6 px-5 py-6 md:grid-cols-[1.2fr_0.8fr] md:items-center">
+<div class="mx-auto grid min-h-dvh max-w-6xl grid-cols-1 gap-5 px-5 py-6 md:grid-cols-[1.2fr_0.8fr] md:items-center">
 	<section class="glow-card relative overflow-hidden rounded-3xl p-6 md:p-8" style="animation: fadeInUp 350ms ease both;">
 		<!-- Decorative blobs -->
 		<div
 			class="pointer-events-none absolute -right-12 -top-12 h-52 w-52 rounded-full"
-			style="background: radial-gradient(circle, rgb(246 190 45 / 40%), transparent 65%);"
+			style="background: radial-gradient(circle, rgb(246 190 45 / 25%), transparent 65%);"
 		></div>
 		<div
 			class="pointer-events-none absolute -bottom-10 -left-10 h-36 w-36 rounded-full"
-			style="background: radial-gradient(circle, rgb(0 169 160 / 30%), transparent 65%);"
+			style="background: radial-gradient(circle, rgb(0 169 160 / 18%), transparent 65%);"
 		></div>
 
 		<img src={`${base}/assets/rc4-entre-logo.png`} alt="RC4Entre logo" class="relative mb-5 h-12 w-auto" />
 		<p class="label-cap relative mb-2 text-[var(--brand-amber)]">RC4 Open House 2026</p>
 		<h1
-			class="relative font-['Kanit'] text-5xl font-extrabold leading-[1.05] md:text-7xl"
+			class="relative font-['Kanit'] text-4xl font-extrabold leading-[1.05] md:text-7xl"
 			style="animation: fadeInUp 400ms 80ms ease both;"
 		>Startup Sprint<br />Arena</h1>
 
@@ -73,7 +73,7 @@
 		</div>
 
 		<!-- Startup fact card with crossfade -->
-		<div class="relative mt-6 rounded-2xl border p-4" style="border-color: var(--border-soft); background: var(--surface-2);">
+		<div class="surface-card relative mt-5 min-h-[6.5rem] p-4">
 			<p class="label-cap">Startup fact</p>
 			{#key factIndex}
 				<p class="fact-text mt-2 text-base font-semibold text-[var(--brand-amber)]">{startupFacts[factIndex]}</p>
@@ -90,7 +90,7 @@
 		</p>
 	</section>
 
-	<section class="space-y-4" style="animation: fadeInUp 350ms 120ms ease both;">
+	<section class="space-y-4" style="animation: fadeSlideIn 350ms 120ms ease both;">
 		<LeaderboardCard {entriesByMode} status={leaderboardStatus} />
 		<div class="glow-card rounded-2xl p-5">
 			<p class="label-cap mb-3">How to play</p>

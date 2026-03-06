@@ -230,8 +230,7 @@
 			<div class="mt-6 flex flex-wrap gap-3">
 				<button class="btn brand-btn rounded-xl px-8" onclick={startRound}>Start Round →</button>
 				<button
-					class="rounded-xl px-6 py-2 text-sm font-semibold back-btn"
-					style="background: var(--surface-2); border: 1px solid var(--border-soft); color: var(--ink);"
+					class="ghost-btn rounded-xl px-6 py-2"
 					onclick={() => (phase = 'attract')}
 				>← Back</button>
 			</div>

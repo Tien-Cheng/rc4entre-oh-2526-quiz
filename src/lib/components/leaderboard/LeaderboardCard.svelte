@@ -50,7 +50,7 @@
 	{#if entries.length === 0}
 		<p class="text-sm opacity-60">No players yet. Be the first to set the bar.</p>
 	{:else}
-		<div class="rounded-xl p-3" style="background: var(--surface-2); border: 1px solid var(--border-soft);">
+		<div class="surface-card p-3">
 			<div class="mb-2 flex items-center justify-between">
 				<p class="label-cap">Quiz Scores</p>
 				<span class="text-[10px] opacity-50">{entries.length} entries</span>
@@ -58,7 +58,7 @@
 			<div class="space-y-1">
 				{#each entries as entry, idx}
 					<div
-						class="flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors"
+						class="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm transition-colors"
 						style="{idx === 0 ? 'background: rgb(0 169 160 / 10%); border: 1px solid rgb(0 169 160 / 20%);' : 'background: rgb(255 255 255 / 4%);'}"
 					>
 						<div class="flex items-center gap-2">

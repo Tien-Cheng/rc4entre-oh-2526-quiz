@@ -90,8 +90,8 @@
 			<div class="text-right">
 				<p class="label-cap">Final Score</p>
 				<p
-					class="font-['Kanit'] font-extrabold tabular-nums text-[var(--brand-amber)]"
-					style="font-size: clamp(3.5rem, 8vw, 5.5rem); line-height: 1; animation: scoreReveal 500ms 150ms ease both; opacity: 0;"
+					class="score-big"
+					style="animation: scoreReveal 500ms 150ms ease both; opacity: 0;"
 				>{displayScore}</p>
 			</div>
 		</div>
@@ -114,8 +114,8 @@
 		<div class="mt-6 grid gap-3">
 			{#if quizScore !== undefined}
 				<div
-					class="rounded-2xl p-5"
-					style="background: var(--surface-2); border-left: 3px solid var(--brand-teal); animation: fadeInUp 300ms 350ms ease both; opacity: 0;"
+					class="surface-card accent-left-teal rounded-2xl p-5"
+					style="animation: fadeSlideIn 300ms 350ms ease both; opacity: 0;"
 				>
 					<p class="label-cap">Quiz Score</p>
 					<p class="mt-2 font-['Kanit'] text-4xl font-extrabold">{displayQuiz}</p>
@@ -124,8 +124,7 @@
 			{#if quizScore === undefined}
 				<!-- fallback if no explicit quiz breakdown is available -->
 				<div
-					class="rounded-2xl p-5"
-					style="background: var(--surface-2); border-left: 3px solid var(--brand-teal);"
+					class="surface-card accent-left-teal rounded-2xl p-5"
 				>
 					<p class="label-cap">Score</p>
 					<p class="mt-2 font-['Kanit'] text-4xl font-extrabold">{displayScore}</p>
@@ -136,7 +135,7 @@
 		<!-- CTA box -->
 		<div
 			class="mt-7 rounded-2xl border p-5"
-			style="border-color: rgb(0 169 160 / 45%); background: rgb(0 169 160 / 8%); animation: borderPulse 2.5s ease infinite;"
+			style="border-color: rgb(0 169 160 / 35%); background: rgb(0 169 160 / 6%); box-shadow: 0 0 20px rgb(0 169 160 / 10%);"
 		>
 			<p class="text-sm font-bold">Talk to the RC4Entre booth team →</p>
 			<p class="mt-1 text-sm opacity-85">

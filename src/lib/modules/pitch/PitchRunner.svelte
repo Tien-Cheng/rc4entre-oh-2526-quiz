@@ -78,7 +78,7 @@
 					<!-- Inner circle sits on top -->
 					<div
 						class="absolute grid h-40 w-40 place-items-center rounded-full"
-						style="background: var(--brand-bg);"
+						style="background: var(--brand-bg); box-shadow: inset 0 2px 8px rgb(0 0 0 / 30%);"
 					>
 						<p class="font-['Kanit'] text-2xl font-extrabold tracking-widest text-[var(--brand-teal)]">SPIN</p>
 					</div>
@@ -91,15 +91,15 @@
 			<!-- Product + audience cards -->
 			<div class="mt-6 grid gap-4 md:grid-cols-2">
 				<div
-					class="rounded-2xl p-5"
-					style="background: var(--surface-2); border-left: 3px solid var(--brand-teal); animation: fadeInUp 300ms 60ms ease both; opacity: 0;"
+					class="surface-card accent-left-teal rounded-2xl p-5"
+					style="animation: fadeSlideIn 300ms 60ms ease both; opacity: 0;"
 				>
 					<p class="label-cap">Product</p>
 					<p class="mt-2 text-xl font-bold">{prompt?.product}</p>
 				</div>
 				<div
-					class="rounded-2xl p-5"
-					style="background: var(--surface-2); border-left: 3px solid var(--brand-blue); animation: fadeInUp 300ms 160ms ease both; opacity: 0;"
+					class="surface-card accent-left-blue rounded-2xl p-5"
+					style="animation: fadeSlideIn 300ms 160ms ease both; opacity: 0;"
 				>
 					<p class="label-cap">Audience</p>
 					<p class="mt-2 text-xl font-bold">{prompt?.audience}</p>
@@ -108,8 +108,8 @@
 
 			<!-- Timer + actions bar -->
 			<div
-				class="mt-5 flex flex-wrap items-center justify-between gap-4 rounded-2xl p-5"
-				style="background: var(--surface-2); border: 1px solid var(--border-soft); animation: fadeInUp 300ms 220ms ease both; opacity: 0;"
+				class="surface-card mt-5 flex flex-wrap items-center justify-between gap-4 rounded-2xl p-5"
+				style="animation: fadeSlideIn 300ms 220ms ease both; opacity: 0;"
 			>
 				<div>
 					<p class="label-cap">Prep timer</p>
@@ -129,8 +129,8 @@
 			</div>
 
 			<div
-				class="mt-4 rounded-2xl p-5 text-sm"
-				style="background: var(--surface-2); border: 1px solid var(--border-soft); animation: fadeInUp 300ms 280ms ease both; opacity: 0;"
+				class="surface-card mt-4 rounded-2xl p-5 text-sm"
+				style="animation: fadeSlideIn 300ms 280ms ease both; opacity: 0;"
 			>
 				<p class="label-cap">Pitch Tips</p>
 				<p class="mt-2 opacity-85">Use the prep timer to shape a quick founder-style pitch with a clear problem, solution, and audience fit.</p>
