@@ -36,6 +36,9 @@ export interface QuizResult {
 export interface PitchResult {
 	product: string;
 	audience: string;
+	baseScore: number;
+	timeBonus: number;
+	secondsRemaining: number;
 	score: number;
 	hostBonus: number;
 }
@@ -50,6 +53,7 @@ export interface FlowConfig {
 	order: HybridOrder;
 	questionLimit: number;
 	secondsPerQuestion: number;
+	answerFeedbackMs: number;
 	pitchPrepSeconds: number;
 }
 

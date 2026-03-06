@@ -24,6 +24,9 @@ interface SanitizedBreakdown {
 	pitch?: {
 		product: string;
 		audience: string;
+		baseScore: number;
+		timeBonus: number;
+		secondsRemaining: number;
 		score: number;
 		hostBonus: number;
 	};
@@ -78,10 +81,21 @@ function sanitizeBreakdown(input: unknown): SanitizedBreakdown | null {
 		const pitch = raw.pitch as Record<string, unknown>;
 		const product = sanitizeShortText(pitch.product, 80);
 		const audience = sanitizeShortText(pitch.audience, 80);
+		const baseScore = boundedInt(pitch.baseScore, 0, 100);
+		const timeBonus = boundedInt(pitch.timeBonus, 0, 100);
+		const secondsRemaining = boundedInt(pitch.secondsRemaining, 0, 300);
 		const score = boundedInt(pitch.score, 0, 200);
 		const hostBonus = boundedInt(pitch.hostBonus, 0, 100);
-		if (product && audience && score !== null && hostBonus !== null) {
-			result.pitch = { product, audience, score, hostBonus };
+		if (
+			product &&
+			audience &&
+			baseScore !== null &&
+			timeBonus !== null &&
+			secondsRemaining !== null &&
+			score !== null &&
+			hostBonus !== null
+		) {
+			result.pitch = { product, audience, baseScore, timeBonus, secondsRemaining, score, hostBonus };
 		}
 	}
 

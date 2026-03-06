@@ -245,6 +245,7 @@
 	<QuizRunner
 		questionLimit={defaultFlowConfig.questionLimit}
 		secondsPerQuestion={defaultFlowConfig.secondsPerQuestion}
+		answerFeedbackMs={defaultFlowConfig.answerFeedbackMs}
 		onComplete={onQuizComplete}
 	/>
 {:else if phase === 'pitch'}
@@ -255,6 +256,9 @@
 			{mode}
 			{finalScore}
 			quizScore={completion.quiz?.score}
+			pitchBaseScore={completion.pitch?.baseScore}
+			pitchTimeBonus={completion.pitch?.timeBonus}
+			pitchHostBonus={completion.pitch?.hostBonus}
 			pitchScore={completion.pitch?.score}
 			onNextPlayer={() => {
 				phase = 'attract';

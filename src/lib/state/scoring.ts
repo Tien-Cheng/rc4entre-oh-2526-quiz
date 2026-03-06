@@ -6,6 +6,20 @@ export interface QuizScoreInput {
 	secondsRemainingTotal: number;
 }
 
+export interface PitchScoreInput {
+	secondsRemaining: number;
+	prepSeconds: number;
+	hostBonus: number;
+}
+
+export interface PitchScoreBreakdown {
+	baseScore: number;
+	timeBonus: number;
+	secondsRemaining: number;
+	hostBonus: number;
+	score: number;
+}
+
 export function computeSpeedBonus(secondsRemainingTotal: number): number {
 	return Math.max(0, Math.min(20, Math.floor(secondsRemainingTotal * 0.9)));
 }
@@ -18,6 +32,22 @@ export function computeQuizScore(input: QuizScoreInput): number {
 	const accuracyScore = Math.round((input.correctAnswers / input.questionCount) * 80);
 	const speedBonus = computeSpeedBonus(input.secondsRemainingTotal);
 	return Math.max(0, Math.min(100, accuracyScore + speedBonus));
+}
+
+export function computePitchScore(input: PitchScoreInput): PitchScoreBreakdown {
+	const baseScore = 50;
+	const safeSecondsRemaining = Math.max(0, input.secondsRemaining);
+	const timeBonus =
+		input.prepSeconds > 0 ? Math.max(0, Math.min(20, Math.round((safeSecondsRemaining / input.prepSeconds) * 20))) : 0;
+	const safeHostBonus = Math.max(0, input.hostBonus);
+
+	return {
+		baseScore,
+		timeBonus,
+		secondsRemaining: safeSecondsRemaining,
+		hostBonus: safeHostBonus,
+		score: baseScore + timeBonus + safeHostBonus
+	};
 }
 
 export function combineScore(input: { quizScore?: number; pitchScore?: number }): number {

@@ -47,6 +47,9 @@ describe('submitLeaderboardScore validation', () => {
 			pitch: {
 				product: '  Smart  Cup  ',
 				audience: ' Busy founders ',
+				baseScore: 50,
+				timeBonus: 10,
+				secondsRemaining: 15,
 				score: 80,
 				hostBonus: 5
 			},
@@ -63,6 +66,9 @@ describe('submitLeaderboardScore validation', () => {
 			pitch: {
 				product: 'Smart Cup',
 				audience: 'Busy founders',
+				baseScore: 50,
+				timeBonus: 10,
+				secondsRemaining: 15,
 				score: 80,
 				hostBonus: 5
 			}

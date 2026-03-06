@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { combineScore, computeQuizScore, computeSpeedBonus, effectiveRankScore, rankLabelFromScore } from './scoring';
+import {
+	combineScore,
+	computePitchScore,
+	computeQuizScore,
+	computeSpeedBonus,
+	effectiveRankScore,
+	rankLabelFromScore
+} from './scoring';
 
 describe('scoring', () => {
 	it('computes quiz score using correctness and speed bonus', () => {
@@ -19,6 +26,27 @@ describe('scoring', () => {
 	it('shares speed bonus helper across score calculations', () => {
 		expect(computeSpeedBonus(20)).toBe(18);
 		expect(computeSpeedBonus(999)).toBe(20);
+	});
+
+	it('computes pitch score using base, time bonus, and host bonus', () => {
+		expect(
+			computePitchScore({
+				secondsRemaining: 15,
+				prepSeconds: 30,
+				hostBonus: 7
+			})
+		).toEqual({
+			baseScore: 50,
+			timeBonus: 10,
+			secondsRemaining: 15,
+			hostBonus: 7,
+			score: 67
+		});
+	});
+
+	it('bounds pitch time bonus between 0 and 20', () => {
+		expect(computePitchScore({ secondsRemaining: -5, prepSeconds: 30, hostBonus: 0 }).timeBonus).toBe(0);
+		expect(computePitchScore({ secondsRemaining: 999, prepSeconds: 30, hostBonus: 0 }).timeBonus).toBe(20);
 	});
 
 	it('normalizes hybrid rank score to 0-100 style scale', () => {
