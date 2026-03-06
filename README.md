@@ -77,6 +77,9 @@ npm run functions:build
 - Project: `rc4entre-2026-openhouse`
 - Web config is committed in [src/lib/config/firebase.ts](/Users/tiencheng/Projects/Work/rc4entre-oh-2526-quiz/src/lib/config/firebase.ts).
 - Firestore writes are blocked from clients in [firestore.rules](/Users/tiencheng/Projects/Work/rc4entre-oh-2526-quiz/firestore.rules); score writes go through callable function `submitLeaderboardScore`.
+- App Check is enabled for callable score submission:
+  - client initializes App Check with `ReCaptchaEnterpriseProvider`
+  - Cloud Function `submitLeaderboardScore` enforces App Check (`enforceAppCheck: true`)
 
 ## Event-day runbook
 

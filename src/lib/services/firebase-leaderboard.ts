@@ -1,4 +1,5 @@
-import { initializeApp, type FirebaseOptions, getApps } from 'firebase/app';
+import { initializeApp, type FirebaseApp, type FirebaseOptions, getApps } from 'firebase/app';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 import {
 	getFirestore,
 	collection,
@@ -34,14 +35,35 @@ function isConfigured(config: FirebaseOptions): boolean {
 	return Boolean(config.apiKey && config.authDomain && config.projectId && config.appId);
 }
 
+let appCheckInitialized = false;
+
+function ensureAppCheck(app: FirebaseApp) {
+	if (appCheckInitialized || typeof window === 'undefined') {
+		return;
+	}
+
+	if (!leaderboardClientConfig.appCheckSiteKey) {
+		console.warn('Firebase App Check site key missing; callable writes may be rejected.');
+		return;
+	}
+
+	initializeAppCheck(app, {
+		provider: new ReCaptchaEnterpriseProvider(leaderboardClientConfig.appCheckSiteKey),
+		isTokenAutoRefreshEnabled: true
+	});
+	appCheckInitialized = true;
+}
+
 function defaultDeps(): FirebaseLeaderboardDeps {
 	return {
 		createFirestore(config: FirebaseOptions) {
 			const app = getApps().length > 0 ? getApps()[0] : initializeApp(config);
+			ensureAppCheck(app);
 			return getFirestore(app);
 		},
 		createFunctions(config: FirebaseOptions) {
 			const app = getApps().length > 0 ? getApps()[0] : initializeApp(config);
+			ensureAppCheck(app);
 			return getFunctions(app);
 		},
 		submitCallable(functions: Functions) {

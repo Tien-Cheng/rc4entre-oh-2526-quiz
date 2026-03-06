@@ -11,5 +11,6 @@ export const firebaseWebConfig: FirebaseOptions = {
 
 export const leaderboardClientConfig = {
 	sourceVersion: 'open-house-2026',
-	mode: 'cloud' as const
+	mode: 'cloud' as const,
+	appCheckSiteKey: '6LfoOoEsAAAAAHKtjWcWWrvLBejtKXIjZ5nHtQZD'
 };

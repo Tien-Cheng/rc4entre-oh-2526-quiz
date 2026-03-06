@@ -35,8 +35,11 @@ function validatePayload(payload: Payload) {
 	}
 }
 
-export const submitLeaderboardScore = onCall(async (request) => {
+export const submitLeaderboardScore = onCall({ enforceAppCheck: true }, async (request) => {
 	const payload = (request.data ?? {}) as Payload;
+	if (!request.app) {
+		throw new HttpsError('failed-precondition', 'App Check token is required');
+	}
 	validatePayload(payload);
 
 	const entry = {
