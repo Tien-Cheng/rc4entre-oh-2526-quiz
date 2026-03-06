@@ -10,12 +10,6 @@ describe('game flow transitions', () => {
 		expect(flow.currentPhase()).toBe('results');
 	});
 
-	it('supports pitch-only path', () => {
-		const flow = createGameFlow({ mode: 'pitch-only', order: 'quiz-first' });
-		flow.start();
-		expect(flow.currentPhase()).toBe('pitch');
-	});
-
 	it('supports hybrid pitch-first path', () => {
 		const flow = createGameFlow({ mode: 'hybrid', order: 'pitch-first' });
 		flow.start();
@@ -23,6 +17,16 @@ describe('game flow transitions', () => {
 		flow.completeModule('pitch');
 		expect(flow.currentPhase()).toBe('quiz');
 		flow.completeModule('quiz');
+		expect(flow.currentPhase()).toBe('results');
+	});
+
+	it('supports hybrid quiz-first path', () => {
+		const flow = createGameFlow({ mode: 'hybrid', order: 'quiz-first' });
+		flow.start();
+		expect(flow.currentPhase()).toBe('quiz');
+		flow.completeModule('quiz');
+		expect(flow.currentPhase()).toBe('pitch');
+		flow.completeModule('pitch');
 		expect(flow.currentPhase()).toBe('results');
 	});
 });

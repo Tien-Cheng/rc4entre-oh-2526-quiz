@@ -3,7 +3,7 @@ export const leaderboardDefaults = {
 	maxEntries: 20,
 	attractEntries: 5,
 	minScore: 0,
-	maxScore: 220
+	maxScore: 100
 } as const;
 
-export const leaderboardModes = ['hybrid', 'quiz-only', 'pitch-only'] as const;
+export const leaderboardModes = ['hybrid', 'quiz-only'] as const;

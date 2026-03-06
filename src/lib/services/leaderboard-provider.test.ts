@@ -95,7 +95,7 @@ describe('leaderboard provider', () => {
 			}
 		});
 
-		await provider.submit(sampleEntry('pitch-only'));
+		await provider.submit(sampleEntry('quiz-only'));
 		expect(local.entries).toHaveLength(0);
 		expect(provider.getStatus().backend).toBe('cloud');
 	});

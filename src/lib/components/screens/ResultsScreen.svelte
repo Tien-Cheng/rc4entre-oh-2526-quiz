@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { effectiveRankScore, rankLabelFromScore } from '$lib/state/scoring';
+	import { rankLabelFromScore } from '$lib/state/scoring';
 	import type { GameMode } from '$lib/types/game';
 
 	let {
@@ -8,38 +8,20 @@
 		mode,
 		finalScore,
 		quizScore,
-		pitchBaseScore,
-		pitchTimeBonus,
-		pitchHostBonus,
-		pitchScore,
 		onNextPlayer = () => {}
 	}: {
 		name: string;
 		mode: GameMode;
 		finalScore: number;
 		quizScore?: number;
-		pitchBaseScore?: number;
-		pitchTimeBonus?: number;
-		pitchHostBonus?: number;
-		pitchScore?: number;
 		onNextPlayer?: () => void;
 	} = $props();
 
-	const rank = $derived.by(() => {
-		return rankLabelFromScore(
-			effectiveRankScore({
-				mode,
-				finalScore,
-				quizScore,
-				pitchScore
-			})
-		);
-	});
+	const rank = $derived(rankLabelFromScore(finalScore));
 
 	// Count-up animation
 	let displayScore = $state(0);
 	let displayQuiz = $state(0);
-	let displayPitch = $state(0);
 
 	function countUp(setter: (v: number) => void, target: number, delay = 0): () => void {
 		if (!target) return () => {};
@@ -76,7 +58,6 @@
 
 		disposers.push(countUp((v) => (displayScore = v), finalScore, 100));
 		disposers.push(countUp((v) => (displayQuiz = v), quizScore ?? 0, 300));
-		disposers.push(countUp((v) => (displayPitch = v), pitchScore ?? 0, 500));
 
 		return () => {
 			for (const dispose of disposers) {
@@ -87,8 +68,7 @@
 
 	const modeBadgeStyle = $derived.by(() => {
 		if (mode === 'hybrid') return 'background: var(--brand-teal); color: #003330;';
-		if (mode === 'quiz-only') return 'background: var(--brand-blue); color: #fff;';
-		return 'background: var(--brand-coral); color: #2a0a00;';
+		return 'background: var(--brand-blue); color: #fff;';
 	});
 </script>
 
@@ -122,7 +102,7 @@
 		</div>
 
 		<!-- Score breakdown -->
-		<div class="mt-6 grid gap-3 md:grid-cols-2">
+		<div class="mt-6 grid gap-3">
 			{#if quizScore !== undefined}
 				<div
 					class="rounded-2xl p-5"
@@ -132,22 +112,8 @@
 					<p class="mt-2 font-['Kanit'] text-4xl font-extrabold">{displayQuiz}</p>
 				</div>
 			{/if}
-			{#if pitchScore !== undefined}
-				<div
-					class="rounded-2xl p-5"
-					style="background: var(--surface-2); border-left: 3px solid var(--brand-amber); animation: fadeInUp 300ms 500ms ease both; opacity: 0;"
-				>
-					<p class="label-cap">Pitch Score</p>
-					<p class="mt-2 font-['Kanit'] text-4xl font-extrabold text-[var(--brand-amber)]">{displayPitch}</p>
-					{#if pitchBaseScore !== undefined && pitchTimeBonus !== undefined && pitchHostBonus !== undefined}
-						<p class="mt-2 text-sm opacity-80">
-							{pitchBaseScore} base + {pitchTimeBonus} time + {pitchHostBonus} host bonus
-						</p>
-					{/if}
-				</div>
-			{/if}
-			{#if quizScore === undefined && pitchScore === undefined}
-				<!-- fallback for quiz-only or pitch-only with one score slot -->
+			{#if quizScore === undefined}
+				<!-- fallback if no explicit quiz breakdown is available -->
 				<div
 					class="rounded-2xl p-5"
 					style="background: var(--surface-2); border-left: 3px solid var(--brand-teal);"

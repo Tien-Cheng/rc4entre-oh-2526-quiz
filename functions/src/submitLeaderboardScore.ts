@@ -2,8 +2,8 @@ import { getFirestore } from 'firebase-admin/firestore';
 import { HttpsError, onCall } from 'firebase-functions/v2/https';
 
 const SCORE_MIN = 0;
-const SCORE_MAX = 220;
-const validModes = new Set(['hybrid', 'quiz-only', 'pitch-only']);
+const SCORE_MAX = 100;
+const validModes = new Set(['hybrid', 'quiz-only']);
 
 interface Payload {
 	name?: unknown;
@@ -20,15 +20,6 @@ interface SanitizedBreakdown {
 		questionCount: number;
 		score: number;
 		speedBonus: number;
-	};
-	pitch?: {
-		product: string;
-		audience: string;
-		baseScore: number;
-		timeBonus: number;
-		secondsRemaining: number;
-		score: number;
-		hostBonus: number;
 	};
 }
 
@@ -50,14 +41,6 @@ function boundedInt(value: unknown, min: number, max: number): number | null {
 	return parsed;
 }
 
-function sanitizeShortText(value: unknown, maxLength: number): string | null {
-	if (typeof value !== 'string') {
-		return null;
-	}
-	const normalized = value.trim().replace(/\s+/g, ' ').slice(0, maxLength);
-	return normalized.length > 0 ? normalized : null;
-}
-
 function sanitizeBreakdown(input: unknown): SanitizedBreakdown | null {
 	if (!input || typeof input !== 'object') {
 		return null;
@@ -77,29 +60,7 @@ function sanitizeBreakdown(input: unknown): SanitizedBreakdown | null {
 		}
 	}
 
-	if (raw.pitch && typeof raw.pitch === 'object') {
-		const pitch = raw.pitch as Record<string, unknown>;
-		const product = sanitizeShortText(pitch.product, 80);
-		const audience = sanitizeShortText(pitch.audience, 80);
-		const baseScore = boundedInt(pitch.baseScore, 0, 100);
-		const timeBonus = boundedInt(pitch.timeBonus, 0, 100);
-		const secondsRemaining = boundedInt(pitch.secondsRemaining, 0, 300);
-		const score = boundedInt(pitch.score, 0, 200);
-		const hostBonus = boundedInt(pitch.hostBonus, 0, 100);
-		if (
-			product &&
-			audience &&
-			baseScore !== null &&
-			timeBonus !== null &&
-			secondsRemaining !== null &&
-			score !== null &&
-			hostBonus !== null
-		) {
-			result.pitch = { product, audience, baseScore, timeBonus, secondsRemaining, score, hostBonus };
-		}
-	}
-
-	return result.quiz || result.pitch ? result : null;
+	return result.quiz ? result : null;
 }
 
 function validatePayload(payload: Payload) {
@@ -130,7 +91,7 @@ export const submitLeaderboardScore = onCall(
 
 	const entry = {
 		name: sanitizeName(payload.name),
-		mode: payload.mode as 'hybrid' | 'quiz-only' | 'pitch-only',
+		mode: payload.mode as 'hybrid' | 'quiz-only',
 		score: payload.score as number,
 		timestamp: Date.now(),
 		breakdown: sanitizeBreakdown(payload.breakdown),

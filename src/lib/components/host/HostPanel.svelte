@@ -6,11 +6,9 @@
 		open,
 		mode,
 		order,
-		pitchBonus,
 		soundEnabled,
 		onModeChange = (_mode: GameMode) => {},
 		onOrderChange = (_order: HybridOrder) => {},
-		onPitchBonusChange = (_bonus: number) => {},
 		onSoundToggle = () => {},
 		onClearLeaderboard = () => {},
 		onResetRound = () => {},
@@ -20,11 +18,9 @@
 		open: boolean;
 		mode: GameMode;
 		order: HybridOrder;
-		pitchBonus: number;
 		soundEnabled: boolean;
 		onModeChange?: (mode: GameMode) => void;
 		onOrderChange?: (order: HybridOrder) => void;
-		onPitchBonusChange?: (bonus: number) => void;
 		onSoundToggle?: () => void;
 		onClearLeaderboard?: () => void;
 		onResetRound?: () => void;
@@ -65,10 +61,8 @@
 			<HostLauncher
 				{mode}
 				{order}
-				{pitchBonus}
 				{onModeChange}
 				{onOrderChange}
-				{onPitchBonusChange}
 				{onStart}
 			/>
 

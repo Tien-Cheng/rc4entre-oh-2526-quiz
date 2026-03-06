@@ -1,23 +1,7 @@
-import type { GameMode } from '$lib/types/game';
-
 export interface QuizScoreInput {
 	correctAnswers: number;
 	questionCount: number;
 	secondsRemainingTotal: number;
-}
-
-export interface PitchScoreInput {
-	secondsRemaining: number;
-	prepSeconds: number;
-	hostBonus: number;
-}
-
-export interface PitchScoreBreakdown {
-	baseScore: number;
-	timeBonus: number;
-	secondsRemaining: number;
-	hostBonus: number;
-	score: number;
 }
 
 export function computeSpeedBonus(secondsRemainingTotal: number): number {
@@ -32,44 +16,6 @@ export function computeQuizScore(input: QuizScoreInput): number {
 	const accuracyScore = Math.round((input.correctAnswers / input.questionCount) * 80);
 	const speedBonus = computeSpeedBonus(input.secondsRemainingTotal);
 	return Math.max(0, Math.min(100, accuracyScore + speedBonus));
-}
-
-export function computePitchScore(input: PitchScoreInput): PitchScoreBreakdown {
-	const baseScore = 50;
-	const safeSecondsRemaining = Math.max(0, input.secondsRemaining);
-	const timeBonus =
-		input.prepSeconds > 0 ? Math.max(0, Math.min(20, Math.round((safeSecondsRemaining / input.prepSeconds) * 20))) : 0;
-	const safeHostBonus = Math.max(0, input.hostBonus);
-
-	return {
-		baseScore,
-		timeBonus,
-		secondsRemaining: safeSecondsRemaining,
-		hostBonus: safeHostBonus,
-		score: baseScore + timeBonus + safeHostBonus
-	};
-}
-
-export function combineScore(input: { quizScore?: number; pitchScore?: number }): number {
-	return (input.quizScore ?? 0) + (input.pitchScore ?? 0);
-}
-
-export function effectiveRankScore(input: {
-	mode: GameMode;
-	finalScore: number;
-	quizScore?: number;
-	pitchScore?: number;
-}): number {
-	if (input.mode !== 'hybrid') {
-		return input.finalScore;
-	}
-
-	const parts = [input.quizScore, input.pitchScore].filter((score): score is number => score !== undefined);
-	if (parts.length === 0) {
-		return input.finalScore;
-	}
-
-	return Math.round(parts.reduce((sum, score) => sum + score, 0) / parts.length);
 }
 
 export function rankLabelFromScore(score: number): string {

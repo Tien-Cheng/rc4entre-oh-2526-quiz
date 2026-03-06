@@ -8,8 +8,7 @@
 		onStart = () => {},
 		entriesByMode = {
 			hybrid: [],
-			'quiz-only': [],
-			'pitch-only': []
+			'quiz-only': []
 		} as Record<GameMode, LeaderboardEntry[]>,
 		leaderboardStatus = {
 			backend: 'local-fallback',
@@ -68,7 +67,7 @@
 		<div class="relative mt-4 flex gap-4">
 			<div class="mt-1 h-auto w-[3px] flex-shrink-0 rounded-full" style="background: linear-gradient(to bottom, var(--brand-teal), transparent);"></div>
 			<p class="text-base/7 opacity-85 md:text-lg">
-				Answer rapid-fire startup questions, then pitch a random product to a wild audience. Finish in 2 minutes and climb the board.
+				Answer rapid-fire startup questions, then try a random pitch challenge. Quiz score decides the leaderboard.
 			</p>
 		</div>
 
@@ -92,7 +91,7 @@
 		<div class="glow-card rounded-2xl p-5">
 			<p class="label-cap mb-3">How to play</p>
 			<ol class="space-y-3">
-				{#each ['Enter your name and start your round.', 'Finish quiz and/or pitch depending on host mode.', 'Top score earns RC4Entre bragging rights and prizes.'] as step, i}
+				{#each ['Enter your name and start your round.', 'Finish the quiz, then take on the pitch challenge in hybrid mode.', 'Top quiz score puts you at the top of the leaderboard.'] as step, i}
 					<li class="flex items-start gap-3 text-sm opacity-90">
 						<span
 							class="mt-0.5 grid h-5 w-5 flex-shrink-0 place-items-center rounded-full text-[10px] font-bold"

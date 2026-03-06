@@ -18,7 +18,7 @@ describe('leaderboard service', () => {
 
 	it('falls back to in-memory storage when localStorage is unavailable', () => {
 		const service = createLeaderboardService('rc4entre-leaderboard', { storage: null });
-		service.add({ name: 'C', mode: 'pitch-only', score: 50, timestamp: 3 });
-		expect(service.list('pitch-only')).toHaveLength(1);
+		service.add({ name: 'C', mode: 'quiz-only', score: 50, timestamp: 3 });
+		expect(service.list('quiz-only')).toHaveLength(1);
 	});
 });

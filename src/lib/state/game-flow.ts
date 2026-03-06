@@ -10,10 +10,6 @@ function initialPhase(options: FlowOptions): GamePhase {
 		return 'quiz';
 	}
 
-	if (options.mode === 'pitch-only') {
-		return 'pitch';
-	}
-
 	return options.order === 'pitch-first' ? 'pitch' : 'quiz';
 }
 
@@ -28,7 +24,7 @@ export function createGameFlow(options: FlowOptions) {
 			return phase;
 		},
 		completeModule(module: 'quiz' | 'pitch') {
-			if (options.mode === 'quiz-only' || options.mode === 'pitch-only') {
+			if (options.mode === 'quiz-only') {
 				phase = 'results';
 				return;
 			}

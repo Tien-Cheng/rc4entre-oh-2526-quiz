@@ -2,16 +2,13 @@
 	import { onDestroy } from 'svelte';
 	import { pitchPools } from '$lib/config/pitch-pools';
 	import { selectPitchPrompt } from '$lib/modules/pitch/spin';
-	import { computePitchScore } from '$lib/state/scoring';
 	import type { PitchResult } from '$lib/types/game';
 
 	let {
 		prepSeconds,
-		hostBonus,
 		onComplete = (_result: PitchResult) => {}
 	}: {
 		prepSeconds: number;
-		hostBonus: number;
 		onComplete?: (result: PitchResult) => void;
 	} = $props();
 
@@ -51,16 +48,10 @@
 		phase = 'review';
 		stopTimer();
 
-		const pitchScore = computePitchScore({
-			secondsRemaining: remainingSeconds,
-			prepSeconds: initialPrepSeconds,
-			hostBonus
-		});
-
 		onComplete({
 			product: prompt.product,
 			audience: prompt.audience,
-			...pitchScore
+			secondsRemaining: remainingSeconds
 		});
 	}
 
@@ -131,10 +122,6 @@
 					>{remainingSeconds}s</p>
 				</div>
 				<div class="flex flex-wrap items-center gap-3">
-					<span
-						class="rounded-full px-3 py-1 text-sm font-semibold"
-						style="background: rgb(10 124 203 / 20%); color: var(--brand-blue); border: 1px solid rgb(10 124 203 / 30%);"
-					>Host-awarded bonus +{hostBonus}</span>
 					<button class="btn brand-btn rounded-xl px-6" onclick={completePitch}>
 						{phase === 'prep' ? 'Start Pitch Now →' : 'Complete Pitch ✓'}
 					</button>
@@ -145,9 +132,9 @@
 				class="mt-4 rounded-2xl p-5 text-sm"
 				style="background: var(--surface-2); border: 1px solid var(--border-soft); animation: fadeInUp 300ms 280ms ease both; opacity: 0;"
 			>
-				<p class="label-cap">How pitch scoring works</p>
-				<p class="mt-2 opacity-85">Final pitch score = 50 base points + up to 20 time bonus + the host-awarded bonus.</p>
-				<p class="mt-2 opacity-70">Time bonus depends on how many prep seconds are left when the pitch starts.</p>
+				<p class="label-cap">Pitch Tips</p>
+				<p class="mt-2 opacity-85">Use the prep timer to shape a quick founder-style pitch with a clear problem, solution, and audience fit.</p>
+				<p class="mt-2 opacity-70">This round is for energy and creativity. The leaderboard is based on quiz score only.</p>
 			</div>
 		{/if}
 	</div>

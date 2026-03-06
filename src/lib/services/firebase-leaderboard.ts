@@ -88,7 +88,7 @@ function mapSnapshotEntry(value: unknown): LeaderboardEntry | null {
 	const row = value as Record<string, unknown>;
 	if (
 		typeof row.name !== 'string' ||
-		(row.mode !== 'hybrid' && row.mode !== 'quiz-only' && row.mode !== 'pitch-only') ||
+		(row.mode !== 'hybrid' && row.mode !== 'quiz-only') ||
 		typeof row.score !== 'number' ||
 		typeof row.timestamp !== 'number'
 	) {
