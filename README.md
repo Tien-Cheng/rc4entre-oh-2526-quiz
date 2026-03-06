@@ -44,7 +44,7 @@ npm run functions:build
 
 ## Host controls
 
-- Press `H` to open/close the host panel.
+- Press `Shift+H` to open/close the host panel.
 - From host panel:
   - Set mode and order
   - Adjust pitch bonus
@@ -75,16 +75,16 @@ npm run functions:build
 ## Firebase setup
 
 - Project: `rc4entre-2026-openhouse`
-- Web config is committed in [src/lib/config/firebase.ts](/Users/tiencheng/Projects/Work/rc4entre-oh-2526-quiz/src/lib/config/firebase.ts).
-- Firestore writes are blocked from clients in [firestore.rules](/Users/tiencheng/Projects/Work/rc4entre-oh-2526-quiz/firestore.rules); score writes go through callable function `submitLeaderboardScore`.
+- Web config is committed in [src/lib/config/firebase.ts](src/lib/config/firebase.ts).
+- Firestore writes are blocked from clients in [firestore.rules](firestore.rules); score writes go through callable function `submitLeaderboardScore`.
 - App Check is enabled for callable score submission:
   - client initializes App Check with `ReCaptchaEnterpriseProvider`
   - Cloud Function `submitLeaderboardScore` enforces App Check (`enforceAppCheck: true`)
 
 ## Event-day runbook
 
-- Status chip shows `Cloud`: realtime shared board is healthy.
-- Status chip shows `Local fallback`: device is saving and reading scores locally only.
+- No status chip: realtime cloud sync is healthy.
+- Status chip `Local fallback`: device is saving and reading scores locally only.
 - If `Local fallback` appears unexpectedly:
   1. Continue event flow (gameplay is unaffected).
   2. Check internet/Firebase status.

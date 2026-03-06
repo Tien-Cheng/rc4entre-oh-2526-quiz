@@ -26,13 +26,10 @@
 	];
 
 	const medals = ['🥇', '🥈', '🥉'];
-	const statusStyles: Record<string, string> = {
-		cloud: 'background: rgb(0 169 160 / 14%); color: var(--brand-teal);',
-		'local-fallback': 'background: rgb(246 190 45 / 16%); color: var(--brand-amber);'
-	};
+	const statusStyles = 'background: rgb(246 190 45 / 16%); color: var(--brand-amber);';
 
 	const showStatusChip = $derived.by(() => status.backend !== 'cloud' || !status.healthy);
-	const statusLabel = $derived.by(() => 'Local fallback');
+	const statusLabel = 'Local fallback';
 
 	const statusHint = $derived.by(() =>
 		status.healthy ? status.message ?? 'Leaderboard connected' : status.message ?? 'Sync error'
@@ -45,7 +42,7 @@
 		{#if showStatusChip}
 			<span
 				class="rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider"
-				style="{statusStyles[status.backend]} border: 1px solid rgb(255 255 255 / 10%);"
+				style="{statusStyles} border: 1px solid rgb(255 255 255 / 10%);"
 				title={statusHint}
 			>{statusLabel}</span>
 		{/if}
