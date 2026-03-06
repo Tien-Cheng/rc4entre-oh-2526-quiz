@@ -13,7 +13,6 @@
 	} from '$lib/services/leaderboard-provider';
 	import { createGameFlow } from '$lib/state/game-flow';
 	import { resolveDisplayName } from '$lib/state/player-name';
-	import { combineScore } from '$lib/state/scoring';
 	import type {
 		GameMode,
 		GamePhase,
@@ -32,8 +31,7 @@
 	let completion = $state<ModuleCompletion>({});
 	let leaderboardEntriesByMode = $state<Record<GameMode, LeaderboardEntry[]>>({
 		hybrid: [],
-		'quiz-only': [],
-		'pitch-only': []
+		'quiz-only': []
 	});
 	let leaderboardStatus = $state<LeaderboardStatus>({
 		backend: 'local-fallback',
@@ -43,7 +41,6 @@
 
 	let mode = $state<GameMode>(defaultFlowConfig.mode);
 	let order = $state<HybridOrder>(defaultFlowConfig.order);
-	let pitchBonus = $state(10);
 
 	let flow = createGameFlow({ mode: defaultFlowConfig.mode, order: defaultFlowConfig.order });
 	let leaderboardProvider: LeaderboardProvider | null = null;
@@ -96,17 +93,14 @@
 	}
 
 	async function computeAndStoreFinalScore() {
-		finalScore = combineScore({
-			quizScore: completion.quiz?.score,
-			pitchScore: completion.pitch?.score
-		});
+		finalScore = completion.quiz?.score ?? 0;
 
 		const provider = ensureLeaderboardProvider();
 		await provider.submit({
 			name: displayName,
 			mode,
 			score: finalScore,
-			breakdown: completion
+			breakdown: completion.quiz ? { quiz: completion.quiz } : undefined
 		});
 		leaderboardStatus = provider.getStatus();
 		if (leaderboardStatus.backend === 'local-fallback') {
@@ -192,11 +186,9 @@
 	open={hostOpen}
 	{mode}
 	{order}
-	{pitchBonus}
 	{soundEnabled}
 	onModeChange={(nextMode: GameMode) => (mode = nextMode)}
 	onOrderChange={(nextOrder: HybridOrder) => (order = nextOrder)}
-	onPitchBonusChange={(nextBonus: number) => (pitchBonus = nextBonus)}
 	onSoundToggle={() => (soundEnabled = !soundEnabled)}
 	onClearLeaderboard={clearLeaderboard}
 	onResetRound={resetCurrentRound}
@@ -253,17 +245,13 @@
 		onComplete={onQuizComplete}
 	/>
 {:else if phase === 'pitch'}
-	<PitchRunner prepSeconds={defaultFlowConfig.pitchPrepSeconds} hostBonus={pitchBonus} onComplete={onPitchComplete} />
+	<PitchRunner prepSeconds={defaultFlowConfig.pitchPrepSeconds} onComplete={onPitchComplete} />
 	{:else if phase === 'results'}
 		<ResultsScreen
 			name={displayName}
 			{mode}
 			{finalScore}
 			quizScore={completion.quiz?.score}
-			pitchBaseScore={completion.pitch?.baseScore}
-			pitchTimeBonus={completion.pitch?.timeBonus}
-			pitchHostBonus={completion.pitch?.hostBonus}
-			pitchScore={completion.pitch?.score}
 			onNextPlayer={() => {
 				phase = 'attract';
 				displayName = 'Guest Player';

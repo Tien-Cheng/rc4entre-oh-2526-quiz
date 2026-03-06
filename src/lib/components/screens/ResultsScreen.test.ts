@@ -12,20 +12,18 @@ describe('ResultsScreen', () => {
 		vi.useRealTimers();
 	});
 
-	it('renders the pitch score breakdown', async () => {
+	it('renders the quiz score and omits pitch breakdown text', async () => {
 		render(ResultsScreen, {
 			name: 'Alex',
-			mode: 'pitch-only',
-			finalScore: 67,
-			pitchBaseScore: 50,
-			pitchTimeBonus: 10,
-			pitchHostBonus: 7,
-			pitchScore: 67
+			mode: 'hybrid',
+			finalScore: 82,
+			quizScore: 82
 		});
 
 		await vi.advanceTimersByTimeAsync(1200);
 
-		expect(screen.getByText(/Pitch Score/i)).toBeInTheDocument();
-		expect(screen.getByText(/50 base \+ 10 time \+ 7 host bonus/i)).toBeInTheDocument();
+		expect(screen.getByText(/Quiz Score/i)).toBeInTheDocument();
+		expect(screen.queryByText(/Pitch Score/i)).not.toBeInTheDocument();
+		expect(screen.queryByText(/host bonus/i)).not.toBeInTheDocument();
 	});
 });

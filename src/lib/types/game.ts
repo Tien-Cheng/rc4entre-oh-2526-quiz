@@ -1,4 +1,4 @@
-export type GameMode = 'hybrid' | 'quiz-only' | 'pitch-only';
+export type GameMode = 'hybrid' | 'quiz-only';
 
 export type HybridOrder = 'quiz-first' | 'pitch-first';
 
@@ -36,11 +36,7 @@ export interface QuizResult {
 export interface PitchResult {
 	product: string;
 	audience: string;
-	baseScore: number;
-	timeBonus: number;
 	secondsRemaining: number;
-	score: number;
-	hostBonus: number;
 }
 
 export interface ModuleCompletion {

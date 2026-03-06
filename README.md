@@ -47,7 +47,6 @@ npm run functions:build
 - Press `Shift+H` to open/close the host panel.
 - From host panel:
   - Set mode and order
-  - Adjust pitch bonus
   - Start next player
   - Reset current round
   - Clear leaderboard

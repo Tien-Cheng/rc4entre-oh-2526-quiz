@@ -6,8 +6,7 @@
 	let {
 		entriesByMode = {
 			hybrid: [],
-			'quiz-only': [],
-			'pitch-only': []
+			'quiz-only': []
 		} as EntriesByMode,
 		status = {
 			backend: 'local-fallback',
@@ -21,8 +20,7 @@
 
 	const modeSections: Array<{ mode: GameMode; label: string }> = [
 		{ mode: 'hybrid', label: 'Hybrid' },
-		{ mode: 'quiz-only', label: 'Quiz Only' },
-		{ mode: 'pitch-only', label: 'Pitch Only' }
+		{ mode: 'quiz-only', label: 'Quiz Only' }
 	];
 
 	const medals = ['🥇', '🥈', '🥉'];

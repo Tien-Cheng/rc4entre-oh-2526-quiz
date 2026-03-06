@@ -15,7 +15,7 @@ describe('submitLeaderboardScore validation', () => {
 		expect(() =>
 			leaderboardValidation.validatePayload({
 				mode: 'hybrid',
-				score: 999
+				score: 101
 			})
 		).toThrowError(/out of allowed range/i);
 	});
@@ -44,15 +44,6 @@ describe('submitLeaderboardScore validation', () => {
 				speedBonus: 12,
 				extra: 'ignore'
 			},
-			pitch: {
-				product: '  Smart  Cup  ',
-				audience: ' Busy founders ',
-				baseScore: 50,
-				timeBonus: 10,
-				secondsRemaining: 15,
-				score: 80,
-				hostBonus: 5
-			},
 			nope: { nested: true }
 		});
 
@@ -62,15 +53,6 @@ describe('submitLeaderboardScore validation', () => {
 				questionCount: 10,
 				score: 90,
 				speedBonus: 12
-			},
-			pitch: {
-				product: 'Smart Cup',
-				audience: 'Busy founders',
-				baseScore: 50,
-				timeBonus: 10,
-				secondsRemaining: 15,
-				score: 80,
-				hostBonus: 5
 			}
 		});
 	});
@@ -80,5 +62,14 @@ describe('submitLeaderboardScore validation', () => {
 			quiz: { correctCount: 1, questionCount: 'x', score: 999, speedBonus: 2 }
 		});
 		expect(sanitized).toBeNull();
+	});
+
+	it('rejects pitch-only mode', () => {
+		expect(() =>
+			leaderboardValidation.validatePayload({
+				mode: 'pitch-only',
+				score: 10
+			})
+		).toThrowError(/Invalid mode/i);
 	});
 });

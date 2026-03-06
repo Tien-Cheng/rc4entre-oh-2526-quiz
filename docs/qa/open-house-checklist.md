@@ -6,7 +6,7 @@
 2. Press `H` and verify the host panel opens.
 3. Set default mode:
    - Normal crowd: `Hybrid` + `Quiz -> Pitch`
-   - High queue: `Pitch Only` or `Quiz Only`
+   - High queue: `Quiz Only`
 4. Clear leaderboard before event start.
 5. Run one full dry round end-to-end.
 
@@ -14,7 +14,7 @@
 
 1. Keep one facilitator in host mode and one engaging visitors.
 2. Use `Start Next Player` from host panel between rounds.
-3. Adjust pitch bonus quickly based on pitch quality.
+3. Remind players that only quiz score affects the leaderboard.
 4. If queue builds up, temporarily switch to single-module mode.
 
 ## If something goes wrong
