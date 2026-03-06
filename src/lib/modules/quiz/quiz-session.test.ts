@@ -63,4 +63,59 @@ describe('quiz session', () => {
 
 		expect(first).not.toBe(second);
 	});
+
+	it('selects a mixed set of questions from the full pool before repeating categories', () => {
+		const questions: QuizQuestion[] = [
+			{
+				id: 'startup-1',
+				prompt: 'Startup question',
+				options: ['Correct', 'Wrong', 'Wrong', 'Wrong'],
+				answerIndex: 0,
+				explanation: 'Startup explanation.',
+				category: 'startup'
+			},
+			{
+				id: 'funding-1',
+				prompt: 'Funding question',
+				options: ['Correct', 'Wrong', 'Wrong', 'Wrong'],
+				answerIndex: 0,
+				explanation: 'Funding explanation.',
+				category: 'funding'
+			},
+			{
+				id: 'market-1',
+				prompt: 'Market question',
+				options: ['Correct', 'Wrong', 'Wrong', 'Wrong'],
+				answerIndex: 0,
+				explanation: 'Market explanation.',
+				category: 'market'
+			},
+			{
+				id: 'bonus-1',
+				prompt: 'Bonus question',
+				options: ['Correct', 'Wrong', 'Wrong', 'Wrong'],
+				answerIndex: 0,
+				explanation: 'Bonus explanation.',
+				category: 'bonus'
+			},
+			{
+				id: 'startup-2',
+				prompt: 'Another startup question',
+				options: ['Correct', 'Wrong', 'Wrong', 'Wrong'],
+				answerIndex: 0,
+				explanation: 'Startup explanation.',
+				category: 'startup'
+			}
+		];
+
+		vi.spyOn(Math, 'random').mockReturnValue(0);
+		const session = createQuizSession({ questionLimit: 4, secondsPerQuestion: 10, questions });
+		const selected = Array.from({ length: 4 }, () => {
+			const current = session.currentQuestion();
+			session.answerCurrent(current?.answerIndex ?? -1, 10);
+			return current?.category;
+		});
+
+		expect(selected).toEqual(['funding', 'market', 'bonus', 'startup']);
+	});
 });
